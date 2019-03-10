@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">skripsi</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_tugas">TugasActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+
+    <!--Home-->
+    <string name="home_label_tugas">Tugas Saya</string>
+    <string name="home_label_buat_jadwal">Buat Jadwal</string>
+    <string name="label_daftar_pengaduan">Daftar Pengaduan</string>
+    <string name="label_tanaman">Tanaman dan Taman</string>
+    <string name="label_kebersihan">Kebersihan</string>
+    <string name="label_barang">Barang dan Peralatan</string>
+    <string name="label_ruang">Ruang dan Bangunan</string>
+
+    <!--Form Pengaduan-->
+    <string name="label_form_pengaduan_tanaman">Form Pengaduan Tanaman</string>
+    <string name="label_form_pengaduan_kebersihan">Form Pengaduan Kebersihan</string>
+    <string name="label_form_pengaduan_barang">Form Pengaduan Barang</string>
+    <string name="label_form_pengaduan_bangunan">Form Pengaduan Bangunan</string>
+    <string name="label_nama_tanaman">Nama Tanaman</string>
+    <string name="label_lokas">Lokasi</string>
+    <string name="label_deskripsi">Deskripsi</string>
+
+    <!--Form Jadwal Maintenance-->
+    <string name="label_kategori">Kategori inventaris</string>
+    <string name="label_nomor">Nomor inventaris</string>
+    <string name="label_skala_waktu">Skala waktu maintenance</string>
+    <string name="label_waktu_terakhir">Terakhir maintenance</string>
+    <string name="label_waktu_maintenance">Waktu maintenance</string>
+
+    <string name="label_submit">Submit</string>
+    <string name="label_tugas_saya">Tugas Saya</string>
+    <string name="label_jadwal_maintenance">Jadwal Maintenance</string>
+    <string name="label_form_jadwal">Form Jadwal Maintenance</string>
+    <string name="label_riwayat">Riwayat Maintenance</string>
+
+    <style name="label_daftar_pengaduan">Daftar Pengaduan</style>
+
+</resources>

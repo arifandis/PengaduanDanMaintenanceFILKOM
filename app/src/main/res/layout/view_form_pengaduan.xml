@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/formPengaduan_labelTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/label_form_pengaduan_tanaman"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/formPengaduan_selectImg"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/baseline_add_photo_alternate_black_48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/formPengaduan_labelTitleTv" />
+
+    <TextView
+        android:id="@+id/formPengaduan_labelNamaTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="Nama Tanaman"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/formPengaduan_inputNamaEt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/formPengaduan_inputNamaEt" />
+
+    <EditText
+        android:id="@+id/formPengaduan_inputNamaEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_edit_text_line"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/formPengaduan_labelNamaTv"
+        app:layout_constraintTop_toBottomOf="@+id/formPengaduan_selectImg" />
+
+    <TextView
+        android:id="@+id/formPengaduan_labelLokasiTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_lokas"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/formPengaduan_inputLokasiEt"
+        app:layout_constraintStart_toStartOf="@+id/formPengaduan_labelNamaTv"
+        app:layout_constraintTop_toTopOf="@+id/formPengaduan_inputLokasiEt" />
+
+    <EditText
+        android:id="@+id/formPengaduan_inputLokasiEt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_edit_text_line"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/formPengaduan_inputNamaEt"
+        app:layout_constraintStart_toStartOf="@+id/formPengaduan_inputNamaEt"
+        app:layout_constraintTop_toBottomOf="@+id/formPengaduan_inputNamaEt" />
+
+    <TextView
+        android:id="@+id/formPengaduan_labelDeskripsiTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_deskripsi"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/formPengaduan_labelLokasiTv"
+        app:layout_constraintTop_toTopOf="@+id/formPengaduan_inputDeskripsiEt" />
+
+    <EditText
+        android:id="@+id/formPengaduan_inputDeskripsiEt"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_edit_text_line"
+        android:padding="5dp"
+        android:gravity="top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/formPengaduan_inputLokasiEt"
+        app:layout_constraintStart_toStartOf="@+id/formPengaduan_inputLokasiEt"
+        app:layout_constraintTop_toBottomOf="@+id/formPengaduan_inputLokasiEt" />
+
+
+</android.support.constraint.ConstraintLayout>

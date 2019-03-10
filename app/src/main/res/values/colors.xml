@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#fd9644</color>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorAccent">#fa8231</color>
+    <color name="backgroundColor">#f7f1e3</color>
+    <color name="orange">#ffda79</color>
+    <color name="orange_2">#f56111</color>
+    <color name="orange_3">#f23e13</color>
+    <color name="orange_4">#f96f06</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="grey">#ebebeb</color>
+    <color name="blue">#2581b8</color>
+    <color name="blue_2">#242f41</color>
+    <color name="red">#ff0000</color>
+
+    <color name="belum_diproses">#ff2d22</color>
+    <color name="diproses">#fb9c06</color>
+    <color name="selesai">#07e713</color>
+    <color name="diterima">#2ccefb</color>
+    <color name="divendor">#fc2da2</color>
+</resources>

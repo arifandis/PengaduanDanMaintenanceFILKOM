@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/itemPengaduan_itemCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/itemPengaduan_peopleImg"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/woman"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/itemPengaduan_tanggalTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Tanggal"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@+id/itemPengaduan_statustv"
+                app:layout_constraintStart_toEndOf="@+id/itemPengaduan_peopleImg"
+                app:layout_constraintTop_toTopOf="@+id/itemPengaduan_peopleImg" />
+
+            <TextView
+                android:id="@+id/itemPengaduan_namaTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Barang"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@+id/itemPengaduan_tanggalTv"
+                app:layout_constraintStart_toStartOf="@+id/itemPengaduan_tanggalTv"
+                app:layout_constraintTop_toBottomOf="@+id/itemPengaduan_tanggalTv" />
+
+            <TextView
+                android:id="@+id/itemPengaduan_deskripsiTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@+id/itemPengaduan_namaTv"
+                app:layout_constraintStart_toStartOf="@+id/itemPengaduan_namaTv"
+                app:layout_constraintTop_toBottomOf="@+id/itemPengaduan_namaTv" />
+
+            <TextView
+                android:id="@+id/itemPengaduan_statustv"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/bg_diproses"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Sedang Diproses"
+                android:textAllCaps="true"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/itemPengaduan_peopleImg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/itemPengaduan_peopleImg" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>
