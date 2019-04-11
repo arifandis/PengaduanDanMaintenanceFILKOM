@@ -1,8 +1,12 @@
 package com.example.hanum.skripsi;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +58,11 @@ public class FormPengaduanBarang extends AppCompatActivity implements IPickResul
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_pengaduan_barang);
 
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         imgPhoto = findViewById(R.id.pengaduanBarang_selectImg);
         etNama = findViewById(R.id.pengaduanBarang_inputNamaEt);
         etLokasi = findViewById(R.id.pengaduanBarang_inputLokasiEt);
@@ -86,79 +95,89 @@ public class FormPengaduanBarang extends AppCompatActivity implements IPickResul
             if (nama.isEmpty() || lokasi.isEmpty() || deskripsi.isEmpty()){
                 Toast.makeText(this, "Lengkapi form yang kosong!", Toast.LENGTH_SHORT).show();
             }else {
-                progressDialog.show();
-                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        int idPengaduan = 1;
-                        for (DataSnapshot data: dataSnapshot.child("pengaduan").getChildren()){
-                            idPengaduan++;
-                            Log.d("IdPengaduan",idPengaduan+"");
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+                if (networkInfo !=null && networkInfo.isConnected()){
+                    progressDialog.show();
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            long idPengaduan = dataSnapshot.child("pengaduan").getChildrenCount()+1;
+
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
+                            String tanggal = dateFormat.format(calendar.getTime());
+
+                            StorageReference storageRef = mStorage.child("pengaduan/"+pickResult.getUri().getPathSegments());
+
+                            String finalIdPengaduan = "pengaduan_"+idPengaduan;
+                            storageRef.putFile(pickResult.getUri()).addOnSuccessListener(taskSnapshot -> {
+                                String imageUrl = String.valueOf(taskSnapshot.getDownloadUrl());
+
+                                long idBarang = dataSnapshot.child("barang").getChildrenCount()+1;
+                                boolean cekBarang = false;
+                                String strIdBarang = "";
+                                for (DataSnapshot data: dataSnapshot.child("barang").getChildren()){
+                                    String key = data.child("noInventaris").getValue(String.class);
+                                    if (noInventaris.equalsIgnoreCase(key)){
+                                        cekBarang = true;
+                                        strIdBarang = data.getKey();
+                                    }
+                                }
+
+                                Map<String,Object> barang = new HashMap<>();
+                                barang.put("idBarang",idBarang);
+                                barang.put("nama",nama);
+                                barang.put("lokasi",lokasi);
+                                barang.put("noInventaris",noInventaris.toUpperCase());
+                                barang.put("deskripsi",deskripsi);
+
+                                if (cekBarang){
+                                    Pengaduan pengaduan = new Pengaduan(finalIdPengaduan,id,strIdBarang,deskripsi,imageUrl,lokasi,
+                                            "belum diterima",tanggal,"-","-");
+                                    mRef.child("pengaduan").child(finalIdPengaduan).setValue(pengaduan);
+                                    mRef.child("pengaduan").child(finalIdPengaduan).child("id").setValue(idPengaduan);
+                                    for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").getChildren()){
+                                        String id = data.getKey();
+                                        sendNotifitcation(id);
+                                    }
+                                    Toast.makeText(FormPengaduanBarang.this, "Sukses", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }else{
+                                    Pengaduan pengaduan = new Pengaduan(finalIdPengaduan,id,"barang_"+idBarang,deskripsi,imageUrl,lokasi,
+                                            "belum diterima",tanggal,"-","-");
+                                    mRef.child("pengaduan").child(finalIdPengaduan).setValue(pengaduan);
+                                    mRef.child("pengaduan").child(finalIdPengaduan).child("id").setValue(idPengaduan);
+                                    mRef.child("barang").child("barang_"+idBarang).setValue(barang)
+                                            .addOnSuccessListener(aVoid -> {
+                                                progressDialog.dismiss();
+                                                for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").getChildren()){
+                                                    String id = data.getKey();
+                                                    sendNotifitcation(id);
+                                                }
+                                                startActivity(new Intent(getApplicationContext(),DaftarPengaduan.class));
+                                                finish();
+                                            });
+                                }
+                            });
                         }
 
-                        Calendar calendar = Calendar.getInstance();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
-                        String tanggal = dateFormat.format(calendar.getTime());
-
-                        StorageReference storageRef = mStorage.child("pengaduan/"+pickResult.getUri().getPathSegments());
-
-                        String finalIdPengaduan = "pengaduan_"+idPengaduan;
-                        storageRef.putFile(pickResult.getUri()).addOnSuccessListener(taskSnapshot -> {
-                            String imageUrl = String.valueOf(taskSnapshot.getDownloadUrl());
-
-                            int idBarang = 1;
-                            boolean cekBarang = false;
-                            String strIdBarang = "";
-                            for (DataSnapshot data: dataSnapshot.child("barang").getChildren()){
-                                idBarang++;
-                                String key = data.child("noInventaris").getValue(String.class);
-                                if (noInventaris.equalsIgnoreCase(key)){
-                                    cekBarang = true;
-                                    strIdBarang = data.getKey();
-                                }
-                            }
-
-                            Map<String,Object> barang = new HashMap<>();
-                            barang.put("idBarang",idBarang);
-                            barang.put("nama",nama);
-                            barang.put("lokasi",lokasi);
-                            barang.put("noInventaris",noInventaris.toUpperCase());
-                            barang.put("deskripsi",deskripsi);
-
-                            if (cekBarang){
-                                Pengaduan pengaduan = new Pengaduan(finalIdPengaduan,id,strIdBarang,deskripsi,imageUrl,lokasi,
-                                        "belum diterima",tanggal,"-","-");
-                                mRef.child("pengaduan").child(finalIdPengaduan).setValue(pengaduan);
-                                sendNotifitcation();
-                                Toast.makeText(FormPengaduanBarang.this, "Sukses", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }else{
-                                Pengaduan pengaduan = new Pengaduan(finalIdPengaduan,id,"barang_"+idBarang,deskripsi,imageUrl,lokasi,
-                                        "belum diterima",tanggal,"-","-");
-                                mRef.child("pengaduan").child(finalIdPengaduan).setValue(pengaduan);
-                                mRef.child("barang").child("barang_"+idBarang).setValue(barang)
-                                        .addOnSuccessListener(aVoid -> {
-                                            progressDialog.dismiss();
-                                            sendNotifitcation();
-                                            startActivity(new Intent(getApplicationContext(),DaftarPengaduan.class));
-                                            finish();
-                                        });
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        progressDialog.dismiss();
-                        Toast.makeText(FormPengaduanBarang.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            progressDialog.dismiss();
+                            Toast.makeText(FormPengaduanBarang.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    Log.d("Connectivity","No network connection");
+                    Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+                }
             }
-
         });
     }
 
-    private void sendNotifitcation(){
+    private void sendNotifitcation(String idPegawai){
         try {
             String jsonResponse;
 
@@ -172,13 +191,13 @@ public class FormPengaduanBarang extends AppCompatActivity implements IPickResul
             con.setRequestProperty("Authorization", "Basic NzExODUxODAtMTVhNy00OTM3LWI4OWUtY2JjYzJiODIzMDk0");
             con.setRequestMethod("POST");
 
-            String strJsonBody = ("{"
-                    + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
-                    + "\"filters\": [{\"field\": \"tag\", \"key\": \"User\", \"relation\": \"=\", \"value\": \"Pegawai\"}],"
-                    + "\"data\": {\"foo\": \"bar\"},"
-                    + "\"contents\": {\"en\": \"Pengaduan Anda telah diterima\"},"
-                    + "\"headings\": {\"en\": \"Pengaduan dan Maintenance FILKOM\"}"
-                    + "}");
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"pegawai\", \"relation\": \"=\", \"value\": \""+idPegawai+"\"}],"
+                    +   "\"data\": {\"foo\": \"bar\"},"
+                    +   "\"contents\": {\"en\": \"Terdapat pengaduan baru\"}"
+                    + "}";
+
 
             System.out.println("strJsonBody:\n" + strJsonBody);
 
@@ -205,7 +224,8 @@ public class FormPengaduanBarang extends AppCompatActivity implements IPickResul
             System.out.println("jsonResponse:\n" + jsonResponse);
 
         } catch(Throwable t) {
-//            t.printStackTrace();
+            t.printStackTrace();
+            Log.d("catch",t.getMessage()+"");
             Toast.makeText(this, "Gagal mengirimkan notifikasi", Toast.LENGTH_SHORT).show();
         }
     }

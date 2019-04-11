@@ -1,9 +1,11 @@
 package com.example.hanum.skripsi;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +46,11 @@ public class DetailPengaduan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pengaduan);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         tvNama = findViewById(R.id.detailPengaduan_namaTv);
         tvStatus = findViewById(R.id.detailPengaduan_statusTv);
@@ -135,9 +142,17 @@ public class DetailPengaduan extends AppCompatActivity {
                 }else if (idBarang.contains("taman")){
                     namaBarang = dataSnapshot.child("taman").child(idBarang).child("nama").getValue(String.class);
                 }
-                tvNamaBarang.setText(namaBarang);
 
-                ubahStatus(idPengaduan,idPengadu,idPegawai,status);
+                tvNamaBarang.setText(namaBarang);
+                if (idBarang.contains("barang")){
+                    tvNamaBarang.setOnClickListener(v->{
+                        Intent intent = new Intent(getApplicationContext(),RiwayatKerusakan.class);
+                        intent.putExtra("idBarang",idBarang);
+                        startActivity(intent);
+                    });
+                }
+
+                ubahStatus(idPengadu,idPegawai,status);
             }
 
             @Override
@@ -145,7 +160,7 @@ public class DetailPengaduan extends AppCompatActivity {
         });
     }
 
-    public void ubahStatus(String idPengaduan,String idPengadu, String idPegawai, String status){
+    public void ubahStatus(String idPengadu, String idPegawai, String status){
         String role = preferences.getString("role",null);
         Log.d("Role",role);
         String idPegawaiCurrent = preferences.getString("id",null);
@@ -153,11 +168,20 @@ public class DetailPengaduan extends AppCompatActivity {
             if (status.equals("belum diterima")){
                 btnTerima.setVisibility(View.VISIBLE);
                 btnTerima.setOnClickListener(v->{
-                    sendNotifitcation(idPengadu,status);
+                    sendNotifitcation(idPengadu,status,idPegawai);
+
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
+                    String tanggalDiterima = dateFormat.format(calendar.getTime());
 
                     mRef.child("pengaduan").child(idPengaduan).child("status").setValue("diterima");
                     mRef.child("pengaduan").child(idPengaduan).child("idPegawai").setValue(idPegawaiCurrent);
-                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan).setValue(idPengaduan);
+                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
+                            .child("status").setValue("diterima");
+                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
+                            .child("tanggalDiterima").setValue(tanggalDiterima);
+                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
+                            .child("rating").setValue(0);
 
                     btnPerbaiki.setVisibility(View.VISIBLE);
                     btnVendor.setVisibility(View.VISIBLE);
@@ -172,6 +196,8 @@ public class DetailPengaduan extends AppCompatActivity {
                 }
                 btnPerbaiki.setOnClickListener(v->{
                     mRef.child("pengaduan").child(idPengaduan).child("status").setValue("sedang diproses");
+                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
+                            .child("status").setValue("sedang diproses");
 
                     btnPerbaiki.setVisibility(View.GONE);
                     btnVendor.setVisibility(View.GONE);
@@ -182,6 +208,8 @@ public class DetailPengaduan extends AppCompatActivity {
 
                 btnVendor.setOnClickListener(v->{
                     mRef.child("pengaduan").child(idPengaduan).child("status").setValue("sedang divendor");
+                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
+                            .child("status").setValue("sedang divendor");
 
                     btnPerbaiki.setVisibility(View.GONE);
                     btnVendor.setVisibility(View.GONE);
@@ -195,7 +223,7 @@ public class DetailPengaduan extends AppCompatActivity {
                 }
 
                 btnSelesai.setOnClickListener(v->{
-                    sendNotifitcation(idPengadu,status);
+                    sendNotifitcation(idPengadu,status,idPegawai);
 
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
@@ -203,6 +231,8 @@ public class DetailPengaduan extends AppCompatActivity {
 
                     mRef.child("pengaduan").child(idPengaduan).child("status").setValue("selesai");
                     mRef.child("pengaduan").child(idPengaduan).child("tanggalSelesai").setValue(tanggalSelesai);
+                    mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
+                            .child("status").setValue("selesai");
 
                     btnSelesai.setVisibility(View.GONE);
                     tvStatus.setText("selesai");
@@ -212,7 +242,7 @@ public class DetailPengaduan extends AppCompatActivity {
         }
     }
 
-    private void sendNotifitcation(String id, String status){
+    private void sendNotifitcation(String id, String status,String idPegawai){
         try {
             String jsonResponse;
 
@@ -230,18 +260,18 @@ public class DetailPengaduan extends AppCompatActivity {
             if (status.equals("belum diterima")){
                 strJsonBody = ("{"
                         + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
-                        + "\"filters\": [{\"field\": \"tag\", \"key\": \"User\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
+                        + "\"filters\": [{\"field\": \"tag\", \"key\": \"pengadu\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
                         + "\"data\": {\"foo\": \"bar\"},"
-                        + "\"contents\": {\"en\": \"Pengaduan Anda telah diterima\"},"
-                        + "\"headings\": {\"en\": \"Pengaduan dan Maintenance FILKOM\"}"
+                        + "\"contents\": {\"en\": \""+idPegawai+" telah menerima pengaduan Anda\"},"
+                        + "\"headings\": {\"en\": \""+idPengaduan+" telah diterima\"}"
                         + "}");
             }else{
                 strJsonBody = ("{"
                         + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
-                        + "\"filters\": [{\"field\": \"tag\", \"key\": \"User\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
+                        + "\"filters\": [{\"field\": \"tag\", \"key\": \"pengadu\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
                         + "\"data\": {\"foo\": \"bar\"},"
-                        + "\"contents\": {\"en\": \"Pengaduan Anda telah selesai\"},"
-                        + "\"headings\": {\"en\": \"Pengaduan dan Maintenance FILKOM\"}"
+                        + "\"contents\": {\"en\": \""+idPegawai+" telah menyelesaikan pengaduan Anda\"},"
+                        + "\"headings\": {\"en\": \""+idPengaduan+" telah selesai\"}"
                         + "}");
             }
 

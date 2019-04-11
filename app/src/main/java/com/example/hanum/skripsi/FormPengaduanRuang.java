@@ -1,8 +1,12 @@
 package com.example.hanum.skripsi;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +58,11 @@ public class FormPengaduanRuang extends AppCompatActivity implements IPickResult
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_pengaduan_ruang);
 
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         imgPhoto = findViewById(R.id.pengaduanRuangan_selectImg);
         etNama = findViewById(R.id.pengaduanRuangan_inputNamaEt);
         etLokasi = findViewById(R.id.pengaduanRuangan_inputLokasiEt);
@@ -69,6 +78,7 @@ public class FormPengaduanRuang extends AppCompatActivity implements IPickResult
         etLokasi.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         etDeskripsi.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         imgPhoto.setOnClickListener(v -> PickImageDialog.build(new PickSetup()).show(getSupportFragmentManager()));
+
     }
 
     @Override
@@ -84,62 +94,67 @@ public class FormPengaduanRuang extends AppCompatActivity implements IPickResult
             if (nama.isEmpty() || lokasi.isEmpty() || deskripsi.isEmpty()){
                 Toast.makeText(this, "Lengkapi form yang kosong!", Toast.LENGTH_SHORT).show();
             }else {
-                progressDialog.show();
-                mRef.child("pengaduan").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        int idPengaduan = 1;
-                        for (DataSnapshot data: dataSnapshot.getChildren()){
-                            idPengaduan++;
-                            Log.d("IdPengaduan",idPengaduan+"");
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+                if (networkInfo !=null && networkInfo.isConnected()){
+                    progressDialog.show();
+                    mRef.child("pengaduan").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            long idPengaduan = dataSnapshot.getChildrenCount()+1;
+
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
+                            String tanggal = dateFormat.format(calendar.getTime());
+
+                            StorageReference storageRef = mStorage.child("pengaduan/"+pickResult.getUri().getPathSegments());
+
+                            String finalIdPengaduan = "pengaduan_"+idPengaduan;
+                            storageRef.putFile(pickResult.getUri()).addOnSuccessListener(taskSnapshot -> {
+                                String imageUrl = String.valueOf(taskSnapshot.getDownloadUrl());
+
+                                long idRuang = dataSnapshot.child("ruang").getChildrenCount()+1;
+
+                                Map<String,String> ruangan = new HashMap<>();
+                                ruangan.put("idRuang",String.valueOf(idRuang));
+                                ruangan.put("nama",nama);
+                                ruangan.put("lokasi",lokasi);
+                                ruangan.put("deskripsi",deskripsi);
+
+                                Pengaduan pengaduan = new Pengaduan(finalIdPengaduan,id,"ruang_"+idRuang,deskripsi,imageUrl,lokasi,
+                                        "belum diterima",tanggal,"-","-");
+                                mRef.child("pengaduan").child(finalIdPengaduan).setValue(pengaduan);
+                                mRef.child("pengaduan").child(finalIdPengaduan).child("id").setValue(idPengaduan);
+
+                                mRef.child("ruang").child("ruang_"+idRuang).setValue(ruangan)
+                                        .addOnSuccessListener(aVoid -> {
+                                            progressDialog.dismiss();
+                                            for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").getChildren()){
+                                                String id = data.getKey();
+                                                sendNotifitcation(id);
+                                            }
+                                            startActivity(new Intent(getApplicationContext(),DaftarPengaduan.class));
+                                            finish();
+                                        });
+                            });
                         }
 
-                        Calendar calendar = Calendar.getInstance();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
-                        String tanggal = dateFormat.format(calendar.getTime());
-
-                        StorageReference storageRef = mStorage.child("pengaduan/"+pickResult.getUri().getPathSegments());
-
-                        String finalIdPengaduan = "pengaduan_"+idPengaduan;
-                        storageRef.putFile(pickResult.getUri()).addOnSuccessListener(taskSnapshot -> {
-                            String imageUrl = String.valueOf(taskSnapshot.getDownloadUrl());
-
-                            int idRuang = 1;
-                            for (DataSnapshot data: dataSnapshot.child("ruang").getChildren()){
-                                idRuang++;
-                            }
-
-                            Map<String,String> ruangan = new HashMap<>();
-                            ruangan.put("idRuang",String.valueOf(idRuang));
-                            ruangan.put("nama",nama);
-                            ruangan.put("lokasi",lokasi);
-                            ruangan.put("deskripsi",deskripsi);
-
-                            Pengaduan pengaduan = new Pengaduan(finalIdPengaduan,id,"ruang_"+idRuang,deskripsi,imageUrl,lokasi,
-                                    "belum diterima",tanggal,"-","-");
-                            mRef.child("pengaduan").child(finalIdPengaduan).setValue(pengaduan);
-
-                            mRef.child("ruang").child("ruang_"+idRuang).setValue(ruangan)
-                                    .addOnSuccessListener(aVoid -> {
-                                        progressDialog.dismiss();
-                                        sendNotifitcation();
-                                        startActivity(new Intent(getApplicationContext(),DaftarPengaduan.class));
-                                        finish();
-                                    });
-                        });
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        progressDialog.dismiss();
-                        Toast.makeText(FormPengaduanRuang.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            progressDialog.dismiss();
+                            Toast.makeText(FormPengaduanRuang.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    Log.d("Connectivity","No network connection");
+                    Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void sendNotifitcation(){
+    private void sendNotifitcation(String idPegawai){
         try {
             String jsonResponse;
 
@@ -153,13 +168,13 @@ public class FormPengaduanRuang extends AppCompatActivity implements IPickResult
             con.setRequestProperty("Authorization", "Basic NzExODUxODAtMTVhNy00OTM3LWI4OWUtY2JjYzJiODIzMDk0");
             con.setRequestMethod("POST");
 
-            String strJsonBody = ("{"
-                    + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
-                    + "\"filters\": [{\"field\": \"tag\", \"key\": \"User\", \"relation\": \"=\", \"value\": \"Pegawai\"}],"
-                    + "\"data\": {\"foo\": \"bar\"},"
-                    + "\"contents\": {\"en\": \"Pengaduan Anda telah diterima\"},"
-                    + "\"headings\": {\"en\": \"Pengaduan dan Maintenance FILKOM\"}"
-                    + "}");
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"pegawai\", \"relation\": \"=\", \"value\": \""+idPegawai+"\"}],"
+                    +   "\"data\": {\"foo\": \"bar\"},"
+                    +   "\"contents\": {\"en\": \"Terdapat pengaduan baru\"}"
+                    + "}";
+
 
             System.out.println("strJsonBody:\n" + strJsonBody);
 
@@ -186,7 +201,8 @@ public class FormPengaduanRuang extends AppCompatActivity implements IPickResult
             System.out.println("jsonResponse:\n" + jsonResponse);
 
         } catch(Throwable t) {
-//            t.printStackTrace();
+            t.printStackTrace();
+            Log.d("catch",t.getMessage()+"");
             Toast.makeText(this, "Gagal mengirimkan notifikasi", Toast.LENGTH_SHORT).show();
         }
     }

@@ -37,12 +37,12 @@
         android:text="@string/label_kategori"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_kategoriEt"
+        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_kategoriSpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/formJadwal_kategoriEt" />
+        app:layout_constraintTop_toTopOf="@+id/formJadwal_kategoriSpinner" />
 
-    <EditText
-        android:id="@+id/formJadwal_kategoriEt"
+    <Spinner
+        android:id="@+id/formJadwal_kategoriSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -50,7 +50,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/bg_edit_text_line"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/formJadwal_labelKategoriTv"
@@ -63,21 +62,21 @@
         android:text="@string/label_nomor"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_nomorEt"
+        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_nomorSpinner"
         app:layout_constraintEnd_toEndOf="@+id/formJadwal_labelKategoriTv"
         app:layout_constraintStart_toStartOf="@+id/formJadwal_labelKategoriTv"
-        app:layout_constraintTop_toTopOf="@+id/formJadwal_nomorEt" />
+        app:layout_constraintTop_toTopOf="@+id/formJadwal_nomorSpinner" />
 
-    <EditText
-        android:id="@+id/formJadwal_nomorEt"
+    <Spinner
+        android:id="@+id/formJadwal_nomorSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_edit_text_line"
         android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="@+id/formJadwal_kategoriEt"
-        app:layout_constraintStart_toStartOf="@+id/formJadwal_kategoriEt"
-        app:layout_constraintTop_toBottomOf="@+id/formJadwal_kategoriEt" />
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/formJadwal_kategoriSpinner"
+        app:layout_constraintStart_toStartOf="@+id/formJadwal_kategoriSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/formJadwal_kategoriSpinner" />
 
     <TextView
         android:id="@+id/formJadwal_labelSkalaTv"
@@ -91,63 +90,72 @@
         app:layout_constraintStart_toStartOf="@+id/formJadwal_labelNomorTv"
         app:layout_constraintTop_toTopOf="@+id/formJadwal_skalaWaktuEt" />
 
+    <ImageButton
+        android:id="@+id/formJadwal_minusBtn"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:background="@color/red_smooth"
+        android:src="@drawable/ic_minus"
+        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_skalaWaktuEt"
+        app:layout_constraintStart_toStartOf="@+id/formJadwal_nomorSpinner"
+        app:layout_constraintTop_toTopOf="@+id/formJadwal_skalaWaktuEt"
+        app:layout_constraintVertical_bias="0.0" />
+
     <EditText
         android:id="@+id/formJadwal_skalaWaktuEt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:background="@drawable/bg_edit_text_line"
         android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="@+id/formJadwal_nomorEt"
-        app:layout_constraintStart_toStartOf="@+id/formJadwal_nomorEt"
-        app:layout_constraintTop_toBottomOf="@+id/formJadwal_nomorEt" />
-
-    <TextView
-        android:id="@+id/formJadwal_labelWaktuTerakhirTv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/label_waktu_terakhir"
-        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:text="0"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_waktuTerakhirEt"
-        app:layout_constraintEnd_toEndOf="@+id/formJadwal_labelSkalaTv"
-        app:layout_constraintStart_toStartOf="@+id/formJadwal_labelSkalaTv"
-        app:layout_constraintTop_toBottomOf="@+id/formJadwal_skalaWaktuEt" />
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/formJadwal_plusBtn"
+        app:layout_constraintStart_toEndOf="@+id/formJadwal_minusBtn"
+        app:layout_constraintTop_toBottomOf="@+id/formJadwal_nomorSpinner" />
 
-    <EditText
-        android:id="@+id/formJadwal_waktuTerakhirEt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_edit_text_line"
-        android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="@+id/formJadwal_skalaWaktuEt"
-        app:layout_constraintStart_toStartOf="@+id/formJadwal_skalaWaktuEt"
-        app:layout_constraintTop_toBottomOf="@+id/formJadwal_skalaWaktuEt" />
+    <ImageButton
+        android:id="@+id/formJadwal_plusBtn"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:background="@color/green_smooth"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_skalaWaktuEt"
+        app:layout_constraintEnd_toEndOf="@+id/formJadwal_nomorSpinner"
+        app:layout_constraintTop_toTopOf="@+id/formJadwal_skalaWaktuEt"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/formJadwal_labelWaktuMaintenanceTv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/label_waktu_maintenance"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/formJadwal_waktuMaintenanceEt"
-        app:layout_constraintEnd_toEndOf="@+id/formJadwal_labelWaktuTerakhirTv"
-        app:layout_constraintStart_toStartOf="@+id/formJadwal_labelWaktuTerakhirTv"
-        app:layout_constraintTop_toTopOf="@+id/formJadwal_waktuMaintenanceEt" />
+    <!--<TextView-->
+        <!--android:id="@+id/formJadwal_labelWaktuTerakhirTv"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="@string/label_waktu_terakhir"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:textSize="15sp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/formJadwal_waktuTerakhirEt"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/formJadwal_labelSkalaTv"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/formJadwal_labelSkalaTv"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/formJadwal_skalaWaktuEt" />-->
 
-    <EditText
-        android:id="@+id/formJadwal_waktuMaintenanceEt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_edit_text_line"
-        android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="@+id/formJadwal_waktuTerakhirEt"
-        app:layout_constraintStart_toStartOf="@+id/formJadwal_waktuTerakhirEt"
-        app:layout_constraintTop_toBottomOf="@+id/formJadwal_waktuTerakhirEt" />
+    <!--<EditText-->
+        <!--android:id="@+id/formJadwal_waktuTerakhirEt"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/bg_edit_text_line"-->
+        <!--android:padding="5dp"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textAlignment="center"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/formJadwal_nomorSpinner"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/formJadwal_nomorSpinner"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/formJadwal_skalaWaktuEt" />-->
 
     <Button
         android:id="@+id/formJadwal_submitBtn"
@@ -162,7 +170,7 @@
         android:text="@string/label_submit"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

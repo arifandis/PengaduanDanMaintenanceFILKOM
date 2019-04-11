@@ -52,6 +52,7 @@ public class DaftarPengaduan extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         adapter = new PengaduanRecyclerAdapter(this,pengaduanList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
@@ -77,7 +78,7 @@ public class DaftarPengaduan extends AppCompatActivity {
     }
 
     public void showPengaduan(){
-        mRef.child("pengaduan").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.child("pengaduan").orderByChild("id").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 pengaduanList.clear();
@@ -86,7 +87,7 @@ public class DaftarPengaduan extends AppCompatActivity {
                     pengaduan.setFoto(data.child("foto").getValue(String.class));
                     pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
                     pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
-                    pengaduan.setIdPengaduan(data.child("idPengaduan").getValue(String.class));
+                    pengaduan.setIdPengaduan(data.getKey());
                     pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
                     pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
                     pengaduan.setStatus(data.child("status").getValue(String.class));
@@ -118,24 +119,28 @@ public class DaftarPengaduan extends AppCompatActivity {
             switch (checkedId){
                 case R.id.dialogFilter_blmDiterimaBtn:
                     pengaduanList.clear();
-                    mRef.child("pengaduan").orderByChild("status").equalTo("belum diterima")
+                    mRef.child("pengaduan").orderByChild("id")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Pengaduan pengaduan = new Pengaduan();
                                     for (DataSnapshot data: dataSnapshot.getChildren()){
-                                        Pengaduan pengaduan = new Pengaduan();
-                                        pengaduan.setFoto(data.child("foto").getValue(String.class));
-                                        pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
-                                        pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
-                                        pengaduan.setIdPengaduan(data.child("idPengaduan").getValue(String.class));
-                                        pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
-                                        pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
-                                        pengaduan.setStatus(data.child("status").getValue(String.class));
-                                        pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
-                                        pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
+                                        String status = data.child("status").getValue(String.class);
+                                        if (status.equals("belum diterima")){
+                                            pengaduan.setFoto(data.child("foto").getValue(String.class));
+                                            pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
+                                            pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
+                                            pengaduan.setIdPengaduan(data.getKey());
+                                            pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
+                                            pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
+                                            pengaduan.setStatus(status);
+                                            pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
+                                            pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
 
-                                        pengaduanList.add(pengaduan);
-                                        adapter.notifyDataSetChanged();
+                                            pengaduanList.add(pengaduan);
+                                            adapter.notifyDataSetChanged();
+                                        }
+
                                     }
 
                                     if (pengaduanList.isEmpty()){
@@ -154,24 +159,27 @@ public class DaftarPengaduan extends AppCompatActivity {
                     break;
                 case R.id.dialogFilter_diterimaBtn:
                     pengaduanList.clear();
-                    mRef.child("pengaduan").orderByChild("status").equalTo("diterima")
+                    mRef.child("pengaduan").orderByChild("id")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Pengaduan pengaduan = new Pengaduan();
                                     for (DataSnapshot data: dataSnapshot.getChildren()){
-                                        Pengaduan pengaduan = new Pengaduan();
-                                        pengaduan.setFoto(data.child("foto").getValue(String.class));
-                                        pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
-                                        pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
-                                        pengaduan.setIdPengaduan(data.child("idPengaduan").getValue(String.class));
-                                        pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
-                                        pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
-                                        pengaduan.setStatus(data.child("status").getValue(String.class));
-                                        pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
-                                        pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
+                                        String status = data.child("status").getValue(String.class);
+                                        if (status.equals("diterima")){
+                                            pengaduan.setFoto(data.child("foto").getValue(String.class));
+                                            pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
+                                            pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
+                                            pengaduan.setIdPengaduan(data.getKey());
+                                            pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
+                                            pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
+                                            pengaduan.setStatus(status);
+                                            pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
+                                            pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
 
-                                        pengaduanList.add(pengaduan);
-                                        adapter.notifyDataSetChanged();
+                                            pengaduanList.add(pengaduan);
+                                            adapter.notifyDataSetChanged();
+                                        }
                                     }
 
                                     if (pengaduanList.isEmpty()){
@@ -190,24 +198,27 @@ public class DaftarPengaduan extends AppCompatActivity {
                     break;
                 case R.id.dialogFilter_diprosesBtn:
                     pengaduanList.clear();
-                    mRef.child("pengaduan").orderByChild("status").equalTo("sedang diproses")
+                    mRef.child("pengaduan").orderByChild("id")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Pengaduan pengaduan = new Pengaduan();
                                     for (DataSnapshot data: dataSnapshot.getChildren()){
-                                        Pengaduan pengaduan = new Pengaduan();
-                                        pengaduan.setFoto(data.child("foto").getValue(String.class));
-                                        pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
-                                        pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
-                                        pengaduan.setIdPengaduan(data.child("idPengaduan").getValue(String.class));
-                                        pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
-                                        pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
-                                        pengaduan.setStatus(data.child("status").getValue(String.class));
-                                        pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
-                                        pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
+                                        String status = data.child("status").getValue(String.class);
+                                        if (status.equals("sedang diproses")){
+                                            pengaduan.setFoto(data.child("foto").getValue(String.class));
+                                            pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
+                                            pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
+                                            pengaduan.setIdPengaduan(data.getKey());
+                                            pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
+                                            pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
+                                            pengaduan.setStatus(status);
+                                            pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
+                                            pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
 
-                                        pengaduanList.add(pengaduan);
-                                        adapter.notifyDataSetChanged();
+                                            pengaduanList.add(pengaduan);
+                                            adapter.notifyDataSetChanged();
+                                        }
                                     }
 
                                     if (pengaduanList.isEmpty()){
@@ -227,24 +238,27 @@ public class DaftarPengaduan extends AppCompatActivity {
                 case R.id.dialogFilter_divendorBtn:
                     pengaduanList.clear();
                     pengaduanList.clear();
-                    mRef.child("pengaduan").orderByChild("status").equalTo("sedang divendor")
+                    mRef.child("pengaduan").orderByChild("id")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Pengaduan pengaduan = new Pengaduan();
                                     for (DataSnapshot data: dataSnapshot.getChildren()){
-                                        Pengaduan pengaduan = new Pengaduan();
-                                        pengaduan.setFoto(data.child("foto").getValue(String.class));
-                                        pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
-                                        pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
-                                        pengaduan.setIdPengaduan(data.child("idPengaduan").getValue(String.class));
-                                        pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
-                                        pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
-                                        pengaduan.setStatus(data.child("status").getValue(String.class));
-                                        pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
-                                        pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
+                                        String status = data.child("status").getValue(String.class);
+                                        if (status.equals("sedang divendor")){
+                                            pengaduan.setFoto(data.child("foto").getValue(String.class));
+                                            pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
+                                            pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
+                                            pengaduan.setIdPengaduan(data.getKey());
+                                            pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
+                                            pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
+                                            pengaduan.setStatus(status);
+                                            pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
+                                            pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
 
-                                        pengaduanList.add(pengaduan);
-                                        adapter.notifyDataSetChanged();
+                                            pengaduanList.add(pengaduan);
+                                            adapter.notifyDataSetChanged();
+                                        }
                                     }
 
                                     if (pengaduanList.isEmpty()){
@@ -264,24 +278,27 @@ public class DaftarPengaduan extends AppCompatActivity {
                 case R.id.dialogFilter_selesaiBtn:
                     pengaduanList.clear();
                     pengaduanList.clear();
-                    mRef.child("pengaduan").orderByChild("status").equalTo("selesai")
+                    mRef.child("pengaduan").orderByChild("id")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Pengaduan pengaduan = new Pengaduan();
                                     for (DataSnapshot data: dataSnapshot.getChildren()){
-                                        Pengaduan pengaduan = new Pengaduan();
-                                        pengaduan.setFoto(data.child("foto").getValue(String.class));
-                                        pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
-                                        pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
-                                        pengaduan.setIdPengaduan(data.child("idPengaduan").getValue(String.class));
-                                        pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
-                                        pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
-                                        pengaduan.setStatus(data.child("status").getValue(String.class));
-                                        pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
-                                        pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
+                                        String status = data.child("status").getValue(String.class);
+                                        if (status.equals("selesai")){
+                                            pengaduan.setFoto(data.child("foto").getValue(String.class));
+                                            pengaduan.setIdBarang(data.child("idBarang").getValue(String.class));
+                                            pengaduan.setIdPengadu(data.child("idPengadu").getValue(String.class));
+                                            pengaduan.setIdPengaduan(data.getKey());
+                                            pengaduan.setKerusakan(data.child("kerusakan").getValue(String.class));
+                                            pengaduan.setLokasi(data.child("lokasi").getValue(String.class));
+                                            pengaduan.setStatus(status);
+                                            pengaduan.setTanggalMasuk(data.child("tanggalMasuk").getValue(String.class));
+                                            pengaduan.setTanggalSelesai(data.child("tanggalSelesai").getValue(String.class));
 
-                                        pengaduanList.add(pengaduan);
-                                        adapter.notifyDataSetChanged();
+                                            pengaduanList.add(pengaduan);
+                                            adapter.notifyDataSetChanged();
+                                        }
                                     }
 
                                     if (pengaduanList.isEmpty()){

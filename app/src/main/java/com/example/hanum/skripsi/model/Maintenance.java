@@ -1,12 +1,22 @@
 package com.example.hanum.skripsi.model;
 
 public class Maintenance {
-    private String idMaintenance,idBarang,tanggal;
+    private String idMaintenance,kategori,nomor;
+    int skala;
 
-    public Maintenance(String idMaintenance, String idBarang, String tanggal) {
+    public Maintenance(String idMaintenance, String kategori, String nomor, int skala) {
         this.idMaintenance = idMaintenance;
-        this.idBarang = idBarang;
-        this.tanggal = tanggal;
+        this.kategori = kategori;
+        this.nomor = nomor;
+        this.skala = skala;
+    }
+
+    public int getSkala() {
+        return skala;
+    }
+
+    public void setSkala(int skala) {
+        this.skala = skala;
     }
 
     public String getIdMaintenance() {
@@ -17,19 +27,19 @@ public class Maintenance {
         this.idMaintenance = idMaintenance;
     }
 
-    public String getIdBarang() {
-        return idBarang;
+    public String getKategori() {
+        return kategori;
     }
 
-    public void setIdBarang(String idBarang) {
-        this.idBarang = idBarang;
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
     }
 
-    public String getTanggal() {
-        return tanggal;
+    public String getNomor() {
+        return nomor;
     }
 
-    public void setTanggal(String tanggal) {
-        this.tanggal = tanggal;
+    public void setNomor(String nomor) {
+        this.nomor = nomor;
     }
 }

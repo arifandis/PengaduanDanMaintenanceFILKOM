@@ -55,4 +55,20 @@
         app:layout_constraintTop_toBottomOf="@+id/riwayat_nomorTv"
         tools:listitem="@layout/item_riwayat"/>
 
+    <TextView
+        android:id="@+id/riwayat_labelKosongTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Kosong"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riwayat_titleTv" />
+
 </android.support.constraint.ConstraintLayout>

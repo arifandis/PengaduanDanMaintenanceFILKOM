@@ -7,17 +7,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.onesignal.OneSignal;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class PilihRoleActivity extends AppCompatActivity {
     private Button btnPengadu,btnPegawai,btnKasubag;
 
     private SharedPreferences pref;
+    private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
     private String PREF_NAME = "SkripsiPrefs";
 
@@ -52,18 +61,11 @@ public class PilihRoleActivity extends AppCompatActivity {
             finish();
         });
 
-//        btnPegawai.setOnClickListener(v->{
-//            Calendar cal = Calendar.getInstance();
-//            cal.set(Calendar.HOUR_OF_DAY,7);
-//            cal.set(Calendar.MINUTE,4);
-//            cal.set(Calendar.SECOND,0);
-//
-//            AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//            Intent intent = new Intent(this, Alarm.class);
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-//            // cal.add(Calendar.SECOND, 5);
-//            alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-//        });
-
+        btnKasubag.setOnClickListener(v-> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.putExtra("role", "kasubag");
+            startActivity(intent);
+            finish();
+        });
     }
 }

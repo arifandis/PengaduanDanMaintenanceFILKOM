@@ -37,10 +37,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
         android:background="@color/orange_4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +55,8 @@
 
             <ImageView
                 android:id="@+id/home_iconPeopleImg"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
@@ -91,12 +89,9 @@
                 style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:progressTint="@color/white"
-                android:rating="3"
-                android:visibility="gone"
                 android:theme="@style/RatingBar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,8 +100,8 @@
 
         <ImageView
             android:id="@+id/home_iconTugasImg"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/ic_tugas"
             android:visibility="gone"
@@ -117,8 +112,8 @@
 
         <ImageView
             android:id="@+id/home_iconBuatJadwalImg"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/ic_buat_jadwal"
             android:visibility="gone"
@@ -143,7 +138,7 @@
             android:id="@+id/home_buatLabelTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/home_label_buat_jadwal"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -152,12 +147,87 @@
             app:layout_constraintEnd_toEndOf="@+id/home_iconBuatJadwalImg"
             app:layout_constraintStart_toStartOf="@+id/home_iconBuatJadwalImg"
             app:layout_constraintTop_toBottomOf="@+id/home_iconBuatJadwalImg" />
+
+        <ImageView
+            android:id="@+id/home_laporan1Img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/report"
+            app:layout_constraintEnd_toStartOf="@+id/home_labelLaporanMaintenanceTv"
+            app:layout_constraintStart_toStartOf="@+id/home_labelLaporanPengaduanTv"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+        <ImageView
+            android:id="@+id/home_laporan2Img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/report"
+            app:layout_constraintEnd_toStartOf="@+id/home_labelLaporanRatingTv"
+            app:layout_constraintStart_toStartOf="@+id/home_labelLaporanMaintenanceTv"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+        <ImageView
+            android:id="@+id/home_laporan3Img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/report"
+            app:layout_constraintEnd_toEndOf="@+id/home_labelLaporanRatingTv"
+            app:layout_constraintStart_toStartOf="@+id/home_labelLaporanRatingTv"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+        <TextView
+            android:id="@+id/home_labelLaporanPengaduanTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_laporan_pengaduan"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@+id/home_labelLaporanMaintenanceTv"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_laporan1Img" />
+
+        <TextView
+            android:id="@+id/home_labelLaporanMaintenanceTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_laporan_maintenance"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toStartOf="@+id/home_labelLaporanRatingTv"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/home_labelLaporanPengaduanTv"
+            app:layout_constraintTop_toBottomOf="@+id/home_laporan2Img" />
+
+        <TextView
+            android:id="@+id/home_labelLaporanRatingTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/label_laporan_rating"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/home_labelLaporanMaintenanceTv"
+            app:layout_constraintTop_toBottomOf="@+id/home_laporan3Img" />
+
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.CardView
         android:id="@+id/home_tugasTamanCard"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="5dp"
         app:cardCornerRadius="40dp"
         app:layout_constraintBottom_toTopOf="@+id/home_tugasBarangCard"
         app:layout_constraintEnd_toStartOf="@+id/home_tugasKebersihanCard"
@@ -198,8 +268,9 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/home_tugasKebersihanCard"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="5dp"
         app:cardCornerRadius="40dp"
         app:layout_constraintBottom_toTopOf="@+id/home_tugasRuangCard"
         app:layout_constraintEnd_toEndOf="parent"
@@ -240,11 +311,11 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/home_tugasBarangCard"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginBottom="5dp"
         app:cardCornerRadius="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/home_daftarPengaduanBtn"
+        app:layout_constraintBottom_toTopOf="@+id/home_jadwalMaintenanceBtn"
         app:layout_constraintEnd_toStartOf="@+id/home_tugasRuangCard"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -284,11 +355,11 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/home_tugasRuangCard"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginBottom="5dp"
         app:cardCornerRadius="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/home_daftarPengaduanBtn"
+        app:layout_constraintBottom_toTopOf="@+id/home_jadwalMaintenanceBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/home_tugasBarangCard"
@@ -326,19 +397,59 @@
     </android.support.v7.widget.CardView>
 
     <Button
+        android:id="@+id/home_jadwalMaintenanceBtn"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/orange_4"
+        android:text="@string/label_jadwal_maintenance"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/home_daftarPengaduanBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/home_daftarPengaduanBtn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/orange_4"
+        android:text="@string/label_daftar_pengaduan"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/home_statistikPengaduanBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/home_statistikPengaduanBtn"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
         android:background="@color/orange_4"
-        android:text="@string/label_daftar_pengaduan"
+        android:text="Statistik Pengaduan"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

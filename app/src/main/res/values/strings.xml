@@ -25,10 +25,17 @@
     <string name="home_label_tugas">Tugas Saya</string>
     <string name="home_label_buat_jadwal">Buat Jadwal</string>
     <string name="label_daftar_pengaduan">Daftar Pengaduan</string>
+    <string name="label_daftar_pengaduan_tanaman">Daftar Pengaduan Tanaman &amp; Taman</string>
+    <string name="label_daftar_pengaduan_barang">Daftar Pengaduan Barang &amp; Peralatan</string>
+    <string name="label_daftar_pengaduan_bersih">Daftar Pengaduan Kebersihan</string>
+    <string name="label_daftar_pengaduan_ruang">Daftar Pengaduan Ruang &amp; Bangunan</string>
     <string name="label_tanaman">Tanaman dan Taman</string>
     <string name="label_kebersihan">Kebersihan</string>
     <string name="label_barang">Barang dan Peralatan</string>
     <string name="label_ruang">Ruang dan Bangunan</string>
+    <string name="label_laporan_pengaduan">Laporan Pengaduan</string>
+    <string name="label_laporan_maintenance">Laporan Maintenance</string>
+    <string name="label_laporan_rating">Laporan Rating</string>
 
     <!--Form Pengaduan-->
     <string name="label_form_pengaduan_tanaman">Form Pengaduan Tanaman</string>
@@ -51,7 +58,34 @@
     <string name="label_jadwal_maintenance">Jadwal Maintenance</string>
     <string name="label_form_jadwal">Form Jadwal Maintenance</string>
     <string name="label_riwayat">Riwayat Maintenance</string>
+    <string name="label_riwayat_kerusakan">Riwayat Kerusakan</string>
+
+    <string-array name="kategori">
+        <item>Pilih Kategori</item>
+        <item>AC</item>
+        <item>LCD</item>
+        <item>Proyektor</item>
+        <item>Scanner</item>
+        <item>Kulkas</item>
+        <item>Printer</item>
+        <item>Karpet Musola</item>
+        <item>Mesin Fotocopy</item>
+        <item>Meja Komputer</item>
+        <item>Server</item>
+        <item>Sound System</item>
+        <item>Perangkat Komputer</item>
+        <item>Amplifier</item>
+        <item>Kamera</item>
+        <item>Drone</item>
+        <item>Televisi</item>
+        <item>Mobil</item>
+        <item>Blower/Kipas</item>
+    </string-array>
 
     <style name="label_daftar_pengaduan">Daftar Pengaduan</style>
+
+    <style name="label_statistik_pengaduan">Statistik Pengaduan</style>
+
+    <style name="label_jadwal_maintenance">Jadwal Maintenance</style>
 
 </resources>

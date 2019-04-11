@@ -1,7 +1,10 @@
 package com.example.hanum.skripsi;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -58,69 +61,87 @@ public class LoginActivity extends AppCompatActivity {
             mProgressView.setVisibility(View.GONE);
             Toast.makeText(this, "NIP atau NIM dan password harus di isi!", Toast.LENGTH_SHORT).show();
         }else {
-            mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Boolean condition = false;
-                    String nama;
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-                    if (role.equals("pengadu")){
-                        for (DataSnapshot data: dataSnapshot.getChildren()){
-                            String key = data.getKey();
-                            if (key.equals("dosen")){
-                                for (DataSnapshot value: data.getChildren()){
-                                    String id = value.getKey();
-                                    String pass = String.valueOf(value.child("password").getValue());
-                                    if (email.equals(id) && password.equals(pass)){
-                                        condition = true;
-                                        nama = value.child("nama").getValue(String.class);
-                                        Log.d("Nama",nama);
+            if (networkInfo !=null && networkInfo.isConnected()){
+                mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Boolean condition = false;
+                        String nama;
+
+                        if (role.equals("pengadu")){
+                            for (DataSnapshot data: dataSnapshot.getChildren()){
+                                String key = data.getKey();
+                                if (key.equals("dosen")){
+                                    for (DataSnapshot value: data.getChildren()){
+                                        String id = value.getKey();
+                                        String pass = String.valueOf(value.child("password").getValue());
+                                        if (email.equals(id) && password.equals(pass)){
+                                            condition = true;
+                                            nama = value.child("nama").getValue(String.class);
+                                            Log.d("Nama",nama);
+                                        }
                                     }
-                                }
-                            }else if(key.equals("mahasiswa")){
-                                for (DataSnapshot value: data.getChildren()){
-                                    String id = value.getKey();
-                                    String pass = String.valueOf(value.child("password").getValue());
-                                    if (email.equals(id) && password.equals(pass)){
-                                        condition = true;
-                                        nama = value.child("nama").getValue(String.class);
-                                        Log.d("Nama",nama);
+                                }else if(key.equals("mahasiswa")){
+                                    for (DataSnapshot value: data.getChildren()){
+                                        String id = value.getKey();
+                                        String pass = String.valueOf(value.child("password").getValue());
+                                        if (email.equals(id) && password.equals(pass)){
+                                            condition = true;
+                                            nama = value.child("nama").getValue(String.class);
+                                            Log.d("Nama",nama);
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }else if (role.equals("pegawai")){
-                        for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").getChildren()){
-                            String id = data.getKey();
-                            String pass = String.valueOf(data.child("password").getValue());
+                        }else if (role.equals("pegawai")){
+                            for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").getChildren()){
+                                String id = data.getKey();
+                                String pass = String.valueOf(data.child("password").getValue());
+                                if (email.equals(id) && password.equals(pass)){
+                                    condition = true;
+                                    nama = data.child("nama").getValue(String.class);
+                                    Log.d("Nama",nama);
+                                }
+                            }
+                        }else if (role.equals("kasubag")){
+                            String id = dataSnapshot.child("kasubag").child("nik").getValue(String.class);
+                            String pass = dataSnapshot.child("kasubag").child("password").getValue(String.class);
                             if (email.equals(id) && password.equals(pass)){
                                 condition = true;
-                                nama = data.child("nama").getValue(String.class);
+                                nama = dataSnapshot.child("kasubag").child("nama").getValue(String.class);
                                 Log.d("Nama",nama);
                             }
                         }
+
+                        if (condition){
+                            SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
+                            editor.putString("id",email);
+                            editor.putString("role",role);
+                            editor.apply();
+
+                            mProgressView.setVisibility(View.GONE);
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            finish();
+                        }else {
+                            Toast.makeText(LoginActivity.this, "Data yang dimasukkan salah!", Toast.LENGTH_SHORT).show();
+                            mProgressView.setVisibility(View.GONE);
+                        }
                     }
 
-                    if (condition){
-                        SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
-                        editor.putString("id",email);
-                        editor.putString("role",role);
-                        editor.apply();
-
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
                         mProgressView.setVisibility(View.GONE);
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    }else {
-                        Toast.makeText(LoginActivity.this, "Data yang dimasukkan salah!", Toast.LENGTH_SHORT).show();
-                        mProgressView.setVisibility(View.GONE);
+                        Log.d("DatabaseError",databaseError.getMessage());
                     }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    mProgressView.setVisibility(View.GONE);
-                    Log.d("DatabaseError",databaseError.getMessage());
-                }
-            });
+                });
+            }else{
+                mProgressView.setVisibility(View.GONE);
+                Log.d("Connectivity","No network connection");
+                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

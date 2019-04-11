@@ -14,10 +14,14 @@
     <color name="blue">#2581b8</color>
     <color name="blue_2">#242f41</color>
     <color name="red">#ff0000</color>
+    <color name="rating">#EF8B1B</color>
 
     <color name="belum_diproses">#ff2d22</color>
     <color name="diproses">#fb9c06</color>
     <color name="selesai">#07e713</color>
     <color name="diterima">#2ccefb</color>
     <color name="divendor">#fc2da2</color>
+
+    <color name="green_smooth">#43A047</color>
+    <color name="red_smooth">#EF5350</color>
 </resources>
