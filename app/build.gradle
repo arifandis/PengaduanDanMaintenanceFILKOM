@@ -63,6 +63,7 @@ dependencies {
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'de.codecrafters.tableview:tableview:2.8.0'
+    implementation 'com.itextpdf:itextg:5.5.10'
 //    implementation 'com.github.levitnudi:LegacyTableView:master-SNAPSHOT'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

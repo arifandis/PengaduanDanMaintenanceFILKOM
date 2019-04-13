@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/itemLaporan_noInvetarisTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:scrollbars="vertical"
+        android:text="Judul"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporan_skalaTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/itemLaporan_skalaTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Status"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporan_noInvetarisTv"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporan_waktuPelaksanaanTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporan_noInvetarisTv"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporan_noInvetarisTv" />
+
+    <TextView
+        android:id="@+id/itemLaporan_waktuPelaksanaanTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Tgl. Mulai"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporan_noInvetarisTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporan_skalaTv"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporan_noInvetarisTv" />
+
+</android.support.constraint.ConstraintLayout>

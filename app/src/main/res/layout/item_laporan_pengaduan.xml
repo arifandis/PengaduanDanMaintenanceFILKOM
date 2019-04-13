@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/itemLaporanPengaduan_JudulTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:scrollbars="vertical"
+        android:text="Judul"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporanPengaduan_StatusTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/itemLaporanPengaduan_StatusTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:textColor="@color/black"
+        android:text="Status"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporanPengaduan_JudulTv"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporanPengaduan_TglMulaiTv"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporanPengaduan_JudulTv"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporanPengaduan_JudulTv" />
+
+    <TextView
+        android:id="@+id/itemLaporanPengaduan_TglMulaiTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Tgl. Mulai"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporanPengaduan_JudulTv"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporanPengaduan_JudulTv"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporanPengaduan_TglSelesaiTv"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporanPengaduan_StatusTv" />
+
+    <TextView
+        android:id="@+id/itemLaporanPengaduan_TglSelesaiTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Tgl. Selesai"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporanPengaduan_JudulTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporanPengaduan_TglMulaiTv"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporanPengaduan_JudulTv" />
+
+</android.support.constraint.ConstraintLayout>

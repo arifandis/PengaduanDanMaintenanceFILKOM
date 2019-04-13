@@ -4,84 +4,155 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LaporanPengaduan"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".LaporanPengaduan">
 
     <include
         android:id="@+id/laporanPengaduan_toolbar"
         layout="@layout/view_custom_toolbar" />
 
-    <TableLayout
-        android:id="@+id/laporanPengaduan_"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/laporanPengaduan_titleTv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#f1f1f1"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/label_laporan_pengaduan"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/laporanPengaduan_toolbar">
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Name"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Email"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Tel"
-                android:textStyle="bold" />
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="1dp"
-                android:layout_marginBottom="1dp"
-                android:layout_weight="1"
-                android:background="#ffffff"
-                android:gravity="center"
-                android:text="Alice" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="1dp"
-                android:layout_marginBottom="1dp"
-                android:layout_weight="1"
-                android:background="#ffffff"
-                android:gravity="center"
-                android:text="a@a.com" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="1dp"
-                android:layout_marginBottom="1dp"
-                android:layout_weight="1"
-                android:background="#ffffff"
-                android:gravity="center"
-                android:text="111-111" />
-        </TableRow>
+        app:layout_constraintTop_toBottomOf="@+id/laporanPengaduan_toolbar" />
 
 
-    </TableLayout>
+    <LinearLayout
+        android:background="@color/grey"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanPengaduan_unduhBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanPengaduan_unduhBtn"
+        android:layout_marginStart="20dp"
+        android:elevation="1dp">
+
+    <Spinner
+        android:id="@+id/laporanPengaduan_bulanSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"/>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/laporanPengaduan_unduhBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:drawableEnd="@drawable/ic_download"
+        android:drawablePadding="10dp"
+        android:text="Unduh"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laporanPengaduan_titleTv" />
+
+    <TextView
+        android:id="@+id/laporanPengaduan_headerJudulTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/rectangle_table_header"
+        android:padding="2dp"
+        android:text="Judul"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanPengaduan_headerTglSelesaiTv"
+        app:layout_constraintEnd_toStartOf="@+id/laporanPengaduan_headerStatusTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanPengaduan_headerTglSelesaiTv" />
+
+    <TextView
+        android:id="@+id/laporanPengaduan_headerStatusTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_table_header"
+        android:padding="2dp"
+        android:text="Status"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanPengaduan_headerTglMulaiTv"
+        app:layout_constraintEnd_toStartOf="@+id/laporanPengaduan_headerTglMulaiTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanPengaduan_headerJudulTv"
+        app:layout_constraintTop_toTopOf="@+id/laporanPengaduan_headerTglMulaiTv" />
+
+    <TextView
+        android:id="@+id/laporanPengaduan_headerTglMulaiTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_table_header"
+        android:padding="2dp"
+        android:text="Tgl. Mulai"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanPengaduan_headerTglSelesaiTv"
+        app:layout_constraintEnd_toStartOf="@+id/laporanPengaduan_headerTglSelesaiTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanPengaduan_headerStatusTv"
+        app:layout_constraintTop_toTopOf="@+id/laporanPengaduan_headerTglSelesaiTv" />
+
+    <TextView
+        android:id="@+id/laporanPengaduan_headerTglSelesaiTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/rectangle_table_header"
+        android:padding="2dp"
+        android:text="Tgl. Selesai"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanPengaduan_headerTglMulaiTv"
+        app:layout_constraintTop_toBottomOf="@+id/laporanPengaduan_unduhBtn" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/laporanPengaduan_recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_laporan_pengaduan"
+        app:layout_constraintEnd_toEndOf="@+id/laporanPengaduan_headerTglSelesaiTv"
+        app:layout_constraintStart_toStartOf="@+id/laporanPengaduan_headerJudulTv"
+        app:layout_constraintTop_toBottomOf="@+id/laporanPengaduan_headerJudulTv" />
+
+    <ProgressBar
+        android:id="@+id/laporanPengaduan_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanPengaduan_recyclerView" />
 
 </android.support.constraint.ConstraintLayout>

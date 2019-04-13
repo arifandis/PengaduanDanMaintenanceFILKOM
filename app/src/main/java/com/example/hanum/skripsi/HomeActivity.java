@@ -24,11 +24,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.onesignal.OneSignal;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class HomeActivity extends AppCompatActivity {
     private CardView cardTanaman,cardKebersihan,cardBarang,cardRuangan;
@@ -177,11 +181,11 @@ public class HomeActivity extends AppCompatActivity {
         tvBuatJadwal.setOnClickListener(v -> startActivity(new Intent(this,CalendarAPI.class)));
 
         imgLaporanPengaduan.setOnClickListener(v -> startActivity(new Intent(this,LaporanPengaduan.class)));
-        imgLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this,CalendarAPI.class)));
-        imgLaporanRating.setOnClickListener(v -> startActivity(new Intent(this,CalendarAPI.class)));
+        imgLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this,LaporanMaintenance.class)));
+        imgLaporanRating.setOnClickListener(v -> startActivity(new Intent(this,LaporanRating.class)));
         tvLaporanPengaduan.setOnClickListener(v -> startActivity(new Intent(this,LaporanPengaduan.class)));
-        tvLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this,CalendarAPI.class)));
-        tvLaporanRating.setOnClickListener(v -> startActivity(new Intent(this,CalendarAPI.class)));
+        tvLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this,LaporanMaintenance.class)));
+        tvLaporanRating.setOnClickListener(v -> startActivity(new Intent(this,LaporanRating.class)));
 
         if (role.equals("pegawai") || role.equals("kasubag")){
             cardTanaman.setOnClickListener(v -> startActivity(new Intent(this,DaftarPengaduanTanaman.class)));

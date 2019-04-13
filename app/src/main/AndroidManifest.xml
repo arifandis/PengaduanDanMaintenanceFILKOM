@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LaporanPengaduan"></activity>
+        <activity android:name=".LaporanRating"></activity>
+        <activity android:name=".LaporanMaintenance" />
+        <activity android:name=".LaporanPengaduan" />
         <activity android:name=".JadwalMaintenance" />
         <activity android:name=".DaftarPengaduanRuang" />
         <activity android:name=".DaftarPengaduanKebersihan" />

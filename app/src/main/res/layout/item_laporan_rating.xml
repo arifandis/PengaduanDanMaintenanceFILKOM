@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/itemLaporanRating_nomorTv"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:scrollbars="vertical"
+        android:text="nomor"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporanRating_namaTv"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporanRating_namaTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporanRating_namaTv" />
+
+    <TextView
+        android:id="@+id/itemLaporanRating_namaTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="nama"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/itemLaporanRating_ratingTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporanRating_nomorTv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/itemLaporanRating_ratingTv"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_data_table"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="rating"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemLaporanRating_namaTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/itemLaporanRating_namaTv"
+        app:layout_constraintTop_toTopOf="@+id/itemLaporanRating_namaTv" />
+
+</android.support.constraint.ConstraintLayout>

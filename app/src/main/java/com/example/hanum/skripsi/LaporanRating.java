@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -14,22 +13,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.hanum.skripsi.adapter.LaporanPengaduanRecyclerAdapter;
-import com.example.hanum.skripsi.model.LaporanPengaduanModel;
+import com.example.hanum.skripsi.adapter.LaporanMaintenanceRecyclerAdapter;
+import com.example.hanum.skripsi.adapter.LaporanRatingRecyclerAdapter;
+import com.example.hanum.skripsi.model.LaporanMaintenanceModel;
+import com.example.hanum.skripsi.model.LaporanRatingModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,21 +50,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
-
-public class LaporanPengaduan extends AppCompatActivity {
+public class LaporanRating extends AppCompatActivity {
     private Spinner spinnerBulan;
     private Button btnUnduh;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
-    private LaporanPengaduanRecyclerAdapter adapter;
-    private List<LaporanPengaduanModel> pengaduans = new ArrayList<>();
+    private LaporanRatingRecyclerAdapter adapter;
+    private List<LaporanRatingModel> laporanRatingModels= new ArrayList<>();
 
     private File pdfFile;
     private ProgressDialog progressDialog;
@@ -79,15 +69,15 @@ public class LaporanPengaduan extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_laporan_pengaduan);
+        setContentView(R.layout.activity_laporan_rating);
 
-        spinnerBulan = findViewById(R.id.laporanPengaduan_bulanSpinner);
-        btnUnduh = findViewById(R.id.laporanPengaduan_unduhBtn);
-        recyclerView = findViewById(R.id.laporanPengaduan_recyclerView);
-        progressBar = findViewById(R.id.laporanPengaduan_progressBar);
+        spinnerBulan = findViewById(R.id.laporanRating_bulanSpinner);
+        btnUnduh = findViewById(R.id.laporanRating_unduhBtn);
+        recyclerView = findViewById(R.id.laporanRating_recyclerView);
+        progressBar = findViewById(R.id.laporanRating_progressBar);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new LaporanPengaduanRecyclerAdapter(this, pengaduans);
+        adapter = new LaporanRatingRecyclerAdapter(this, laporanRatingModels);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -120,8 +110,8 @@ public class LaporanPengaduan extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String bulan = spinnerBulan.getSelectedItem().toString();
-                pengaduans.clear();
-                showLaporanPengaduan(bulan);
+                laporanRatingModels.clear();
+                showLaporanRating(bulan);
             }
 
             @Override
@@ -130,71 +120,46 @@ public class LaporanPengaduan extends AppCompatActivity {
             }
         });
 
-        btnUnduh.setOnClickListener(v-> {
-            progressDialog.show();
+        btnUnduh.setOnClickListener(v->{
+            String bulan = spinnerBulan.getSelectedItem().toString();
             try {
-                String bulan = spinnerBulan.getSelectedItem().toString();
                 createPdf(bulan);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
             } catch (DocumentException e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
             } catch (ParseException e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
             }
         });
-
     }
 
-    private void showLaporanPengaduan(String bulan) {
+    private void showLaporanRating(String bulan) {
         progressBar.setVisibility(View.VISIBLE);
-        mRef.child("pengaduan").orderByChild("id").addListenerForSingleValueEvent(new ValueEventListener() {
+        laporanRatingModels.clear();
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                pengaduans.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    String tanggalMulai = data.child("tanggalMasuk").getValue(String.class);
+                laporanRatingModels.clear();
+                int nomor = 0;
+                for (DataSnapshot dataPegawai: dataSnapshot.child("pegawaiPerkap").getChildren()){
+                    float rating = 0;
+                    int count = 0;
+                    nomor++;
+                    String nama = dataPegawai.child("nama").getValue(String.class);
+                    Log.d("namapegawai",nama);
 
-                    if (tanggalMulai.contains(bulan)) {
-                        String judul = data.child("kerusakan").getValue(String.class);
-                        String status = data.child("status").getValue(String.class);
-                        String tanggalSelesai = data.child("tanggalSelesai").getValue(String.class);
-                        Log.d("tanggalselesai",tanggalSelesai);
-                        SimpleDateFormat format1 = new SimpleDateFormat("dd MMMM yyyy", new Locale("ID"));
-                        SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yy", new Locale("ID"));
+                    for (DataSnapshot dataPengaduan: dataPegawai.child("idPengaduan").getChildren()){
+                        String tanggalDiterima = dataPengaduan.child("tanggalDiterima").getValue(String.class);
+                        String status = dataPengaduan.child("status").getValue(String.class);
 
-                        Date dateMulai = new Date();
-                        Date dateSelesai = new Date();
-                        try {
-                            dateMulai = format1.parse(tanggalMulai);
-                            if (!tanggalSelesai.equals("-")){
-                                dateSelesai = format1.parse(tanggalSelesai);
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        if (tanggalDiterima.contains(bulan) && status.equals("rated")){
+                            rating+=dataPegawai.child("rating").getValue(Float.class);
+                            count++;
                         }
-
-                        String formatTglMulai = format2.format(dateMulai);
-                        String formatTglSelesai = tanggalSelesai;
-                        if (!tanggalSelesai.equals("-")){
-                            formatTglSelesai = format2.format(dateSelesai);
-                        }
-
-                        LaporanPengaduanModel pengaduanModel = new LaporanPengaduanModel(judul, status, formatTglMulai, formatTglSelesai);
-
-                        Log.d("laporanpengaduan", String.valueOf(pengaduanModel));
-
-                        pengaduans.add(pengaduanModel);
-                        adapter.notifyDataSetChanged();
                     }
 
-                }
-
-                if (pengaduans.isEmpty()) {
-                    pengaduans.clear();
+                    laporanRatingModels.add(new LaporanRatingModel(String.valueOf(nomor),nama,rating,count));
                     adapter.notifyDataSetChanged();
                 }
 
@@ -215,9 +180,9 @@ public class LaporanPengaduan extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }else{
             File sd = Environment.getExternalStorageDirectory();
-            String file = "Laporan Pengaduan Bulan "+bulan+".pdf";
+            String file = "Laporan Rating Bulan "+bulan+".pdf";
 
-            File docsFolder = new File(sd.getAbsolutePath() + "/skripsi/Laporan Pengaduan");
+            File docsFolder = new File(sd.getAbsolutePath() + "/skripsi/Laporan Maintenance");
             if (!docsFolder.exists()) {
                 docsFolder.mkdir();
                 Log.i("note", "Created a new directory for PDF");
@@ -230,51 +195,37 @@ public class LaporanPengaduan extends AppCompatActivity {
             PdfWriter.getInstance(document, output);
 
             document.open();
-            PdfPTable table = new PdfPTable(4); // 4 columns.
+            PdfPTable table = new PdfPTable(3); // 3 columns.
 
-//            Calendar cal = Calendar.getInstance();
-            SimpleDateFormat format1 = new SimpleDateFormat("dd MMMM yyyy", new Locale("ID"));
-            Paragraph title = new Paragraph("Laporan Pengaduan\nBulan "+bulan,
+            Paragraph title = new Paragraph("Laporan Rating\nBulan "+bulan,
                     new Font(Font.FontFamily.UNDEFINED,20,Font.BOLD));
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(new Phrase("\n"));
 
-            PdfPCell cellHeaderJudul = new PdfPCell(new Paragraph("Judul",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
-            cellHeaderJudul.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
-            PdfPCell cellHeaderStatus = new PdfPCell(new Paragraph("Status",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
-            cellHeaderStatus.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
-            PdfPCell cellHeaderTglMulai = new PdfPCell(new Paragraph("Tanggal Mulai",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
-            cellHeaderTglMulai.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
-            PdfPCell cellHeaderTglSelesai = new PdfPCell(new Paragraph("Tanggal Selesai",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
-            cellHeaderTglSelesai.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
-            table.addCell(cellHeaderJudul);
-            table.addCell(cellHeaderStatus);
-            table.addCell(cellHeaderTglMulai);
-            table.addCell(cellHeaderTglSelesai);
+            PdfPCell cellHeaderNo = new PdfPCell(new Paragraph("Nomor",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
+            cellHeaderNo.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
+            PdfPCell cellHeaderNama = new PdfPCell(new Paragraph("Nama",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
+            cellHeaderNama.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
+            PdfPCell cellHeaderRating = new PdfPCell(new Paragraph("Rating",new Font(Font.FontFamily.UNDEFINED,11,Font.BOLD)));
+            cellHeaderRating.setBackgroundColor(new BaseColor(getResources().getColor(R.color.grey)));
+            table.addCell(cellHeaderNo);
+            table.addCell(cellHeaderNama);
+            table.addCell(cellHeaderRating);
 
-            for (LaporanPengaduanModel model: pengaduans){
-                PdfPCell cell1 = new PdfPCell(new Paragraph(model.getJudul()));
-                PdfPCell cell2 = new PdfPCell(new Paragraph(model.getStatus()));
+            for (LaporanRatingModel model: laporanRatingModels){
+                PdfPCell cell1 = new PdfPCell(new Paragraph(model.getNomor()));
+                PdfPCell cell2 = new PdfPCell(new Paragraph(model.getNama()));
 
-                SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yy", new Locale("ID"));
-
-                Date date1 = format2.parse(model.getTanggalMulai());
-                Date date2;
-                String tanggalSelesai = model.getTanggalSelesai();
-                if (!model.getTanggalSelesai().equals("-")){
-                    date2 = format2.parse(model.getTanggalSelesai());
-                    tanggalSelesai = format1.format(date2);
+                float rating = 0;
+                if (model.getCount() != 0){
+                    rating = model.getRating()/model.getCount();
                 }
-
-                String tanggalMulai = format1.format(date1);
-                PdfPCell cell3 = new PdfPCell(new Paragraph(tanggalMulai));
-                PdfPCell cell4 = new PdfPCell(new Paragraph(tanggalSelesai));
+                PdfPCell cell3 = new PdfPCell(new Paragraph(String.valueOf(rating)));
 
                 table.addCell(cell1);
                 table.addCell(cell2);
                 table.addCell(cell3);
-                table.addCell(cell4);
             }
 
             document.add(table);

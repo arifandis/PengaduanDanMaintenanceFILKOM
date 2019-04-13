@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".LaporanMaintenance">
+
+    <include
+        android:id="@+id/laporanMaintenance_toolbar"
+        layout="@layout/view_custom_toolbar" />
+
+    <TextView
+        android:id="@+id/laporanMaintenance_titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/label_laporan_maintenance"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laporanMaintenance_toolbar" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/grey"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanMaintenance_unduhBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanMaintenance_unduhBtn">
+
+        <Spinner
+            android:id="@+id/laporanMaintenance_bulanSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/laporanMaintenance_unduhBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:drawableEnd="@drawable/ic_download"
+        android:drawablePadding="10dp"
+        android:text="Unduh"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laporanMaintenance_titleTv" />
+
+    <TextView
+        android:id="@+id/laporanMaintenance_headerNoInventarisTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/rectangle_table_header"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="No Inventaris"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanMaintenance_headerWaktuTv"
+        app:layout_constraintEnd_toStartOf="@+id/laporanMaintenance_headerSkalaTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanMaintenance_headerWaktuTv" />
+
+    <TextView
+        android:id="@+id/laporanMaintenance_headerSkalaTv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle_table_header"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Skala"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanMaintenance_headerWaktuTv"
+        app:layout_constraintEnd_toStartOf="@+id/laporanMaintenance_headerWaktuTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanMaintenance_headerNoInventarisTv"
+        app:layout_constraintTop_toTopOf="@+id/laporanMaintenance_headerWaktuTv" />
+
+    <TextView
+        android:id="@+id/laporanMaintenance_headerWaktuTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/rectangle_table_header"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Waktu Pelaksanaan"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanMaintenance_headerSkalaTv"
+        app:layout_constraintTop_toBottomOf="@+id/laporanMaintenance_unduhBtn" />
+
+
+    <android.support.v7.widget.RecyclerView
+    android:id="@+id/laporanMaintenance_recyclerView"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginBottom="15dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    tools:listitem="@layout/item_laporan_maintenance"
+    app:layout_constraintEnd_toEndOf="@+id/laporanMaintenance_headerWaktuTv"
+    app:layout_constraintStart_toStartOf="@+id/laporanMaintenance_headerNoInventarisTv"
+    app:layout_constraintTop_toBottomOf="@+id/laporanMaintenance_headerNoInventarisTv" />
+
+    <ProgressBar
+        android:id="@+id/laporanMaintenance_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanMaintenance_recyclerView" />
+</android.support.constraint.ConstraintLayout>

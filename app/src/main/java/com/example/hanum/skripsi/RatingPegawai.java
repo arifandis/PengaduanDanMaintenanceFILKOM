@@ -18,6 +18,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
 public class RatingPegawai extends AppCompatActivity {
     private TextView tvNama,tvDeskripsi,tvNipNim;
     private Button btnSubmit;
@@ -104,6 +109,7 @@ public class RatingPegawai extends AppCompatActivity {
                             float ratinxFix = rating/count;
                             mRef.child("pegawaiPerkap").child(mIdPegawai).child("rating").setValue(ratinxFix)
                                     .addOnSuccessListener(aVoid -> {
+                                        sendNotifitcation();
                                         Toast.makeText(getApplicationContext(), "Rating berhasil diberikan", Toast.LENGTH_SHORT).show();
                                         finish();
                                     });
@@ -116,5 +122,58 @@ public class RatingPegawai extends AppCompatActivity {
                     });
                 });
 
+    }
+
+    private void sendNotifitcation(){
+        try {
+            String jsonResponse;
+
+            URL url = new URL("https://onesignal.com/api/v1/notifications");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setUseCaches(false);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("Authorization", "Basic NzExODUxODAtMTVhNy00OTM3LWI4OWUtY2JjYzJiODIzMDk0");
+            con.setRequestMethod("POST");
+
+            String strJsonBody = ("{"
+                    + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
+                    + "\"filters\": [{\"field\": \"tag\", \"key\": \"pengadu\", \"relation\": \"=\", \"value\": \""+mIdPegawai+"\"}],"
+                    + "\"data\": {\"foo\": \"bar\"},"
+                    + "\"contents\": {\"en\": \"Selamat Anda mendapatkan rating\"},"
+                    + "\"headings\": {\"en\": \"Anda telah melaksanakan tugas dengan baik\"}"
+                    + "}");
+
+
+            System.out.println("strJsonBody:\n" + strJsonBody);
+
+            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            con.setFixedLengthStreamingMode(sendBytes.length);
+
+            OutputStream outputStream = con.getOutputStream();
+            outputStream.write(sendBytes);
+
+            int httpResponse = con.getResponseCode();
+            System.out.println("httpResponse: " + httpResponse);
+
+            if (  httpResponse >= HttpURLConnection.HTTP_OK
+                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            else {
+                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            System.out.println("jsonResponse:\n" + jsonResponse);
+
+        } catch(Throwable t) {
+//            t.printStackTrace();
+            Toast.makeText(this, "Gagal mengirimkan notifikasi", Toast.LENGTH_SHORT).show();
+        }
     }
 }

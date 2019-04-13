@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LaporanRating"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/laporanRating_toolbar"
+        layout="@layout/view_custom_toolbar" />
+
+    <TextView
+        android:id="@+id/laporanMaintenance_titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/label_laporan_rating"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laporanRating_toolbar" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/grey"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/laporanRating_unduhBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanRating_unduhBtn">
+
+        <Spinner
+            android:id="@+id/laporanRating_bulanSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/laporanRating_unduhBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:drawableEnd="@drawable/ic_download"
+        android:drawablePadding="10dp"
+        android:text="Unduh"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laporanMaintenance_titleTv" />
+
+    <TextView
+        android:id="@+id/laporanRating_headerNomorTv"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/rectangle_table_header"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Nomor"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/laporanRating_headerNamaTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanRating_headerRatingTv" />
+
+    <TextView
+        android:id="@+id/laporanRating_headerNamaTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_table_header"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Nama"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/laporanRating_headerRatingTv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanRating_headerNomorTv"
+        app:layout_constraintTop_toTopOf="@+id/laporanRating_headerRatingTv" />
+
+    <TextView
+        android:id="@+id/laporanRating_headerRatingTv"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/rectangle_table_header"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Rating"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/laporanRating_headerNamaTv"
+        app:layout_constraintTop_toBottomOf="@+id/laporanRating_unduhBtn" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/laporanRating_recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_laporan_rating"
+        app:layout_constraintEnd_toEndOf="@+id/laporanRating_headerRatingTv"
+        app:layout_constraintStart_toStartOf="@+id/laporanRating_headerNomorTv"
+        app:layout_constraintTop_toBottomOf="@+id/laporanRating_headerNomorTv" />
+
+    <ProgressBar
+        android:id="@+id/laporanRating_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/laporanRating_recyclerView" />
+
+</android.support.constraint.ConstraintLayout>
