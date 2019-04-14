@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -17,14 +19,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LaporanRating"></activity>
-        <activity android:name=".LaporanMaintenance" />
-        <activity android:name=".LaporanPengaduan" />
-        <activity android:name=".JadwalMaintenance" />
-        <activity android:name=".DaftarPengaduanRuang" />
-        <activity android:name=".DaftarPengaduanKebersihan" />
-        <activity android:name=".DaftarPengaduanBarang" />
-        <activity android:name=".DaftarPengaduanTanaman" />
+        <activity android:name=".LaporanRating"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".LaporanMaintenance"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LaporanPengaduan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".JadwalMaintenance"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DaftarPengaduanRuang"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DaftarPengaduanKebersihan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DaftarPengaduanBarang"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DaftarPengaduanTanaman"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StatistikPengaduan"
             android:screenOrientation="portrait" />

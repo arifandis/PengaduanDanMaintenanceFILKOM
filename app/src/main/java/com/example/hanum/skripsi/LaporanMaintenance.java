@@ -43,6 +43,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -183,9 +184,13 @@ public class LaporanMaintenance extends AppCompatActivity {
             String file = "Laporan Maintenance Bulan "+bulan+".pdf";
 
             File docsFolder = new File(sd.getAbsolutePath() + "/skripsi/Laporan Maintenance");
-            if (!docsFolder.exists()) {
-                docsFolder.mkdir();
-                Log.i("note", "Created a new directory for PDF");
+            if (!docsFolder.isDirectory()) {
+                docsFolder.mkdirs();
+                try {
+                    docsFolder.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             pdfFile = new File(docsFolder,file);
@@ -233,25 +238,16 @@ public class LaporanMaintenance extends AppCompatActivity {
             document.close();
             progressDialog.dismiss();
             Toast.makeText(this, "Laporan berhasil di exort", Toast.LENGTH_SHORT).show();
-            previewPdf();
+            previewPdf(sd.getAbsolutePath() + "/skripsi/Laporan Maintenance/"+file);
         }
     }
 
-    private void previewPdf() {
+    private void previewPdf(String path) {
 
-        PackageManager packageManager = getPackageManager();
-        Intent testIntent = new Intent(Intent.ACTION_VIEW);
-        testIntent.setType("application/pdf");
-        List list = packageManager.queryIntentActivities(testIntent, PackageManager.MATCH_DEFAULT_ONLY);
-        if (list.size() > 0) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            Uri uri = Uri.fromFile(pdfFile);
-            intent.setDataAndType(uri, "application/pdf");
-
-            startActivity(intent);
-        }else{
-            Toast.makeText(this,"Download a PDF Viewer to see the generated PDF", Toast.LENGTH_SHORT).show();
-        }
+        File open = new File(path);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.fromFile(open));
+        Intent chooser = Intent.createChooser(intent,"Pilih");
+        startActivity(chooser);
     }
 }

@@ -90,7 +90,7 @@ public class FormPengaduanKebersihan extends AppCompatActivity implements IPickR
             String deskripsi = etDeskripsi.getText().toString();
 
             if (nama.isEmpty() || lokasi.isEmpty() || deskripsi.isEmpty()){
-                Toast.makeText(this, "Lengkapi form yang kosong!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Semua kolom harus diisi", Toast.LENGTH_SHORT).show();
             }else {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();

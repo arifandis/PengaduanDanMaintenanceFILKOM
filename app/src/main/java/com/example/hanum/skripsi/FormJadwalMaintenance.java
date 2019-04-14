@@ -163,7 +163,7 @@ public class FormJadwalMaintenance extends AppCompatActivity {
         if (kategori.equalsIgnoreCase("Pilih kategori") || noInventaris.equalsIgnoreCase("Pilih Nomor Inventaris")
                 || skala == 0){
             progressDialog.dismiss();
-            Toast.makeText(this, "Lengkapi form yang ada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Semua kolom harus diisi", Toast.LENGTH_SHORT).show();
         }else {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();

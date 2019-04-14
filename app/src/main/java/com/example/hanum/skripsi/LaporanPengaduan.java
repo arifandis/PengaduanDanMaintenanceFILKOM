@@ -1,14 +1,18 @@
 package com.example.hanum.skripsi;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,6 +53,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -218,9 +223,13 @@ public class LaporanPengaduan extends AppCompatActivity {
             String file = "Laporan Pengaduan Bulan "+bulan+".pdf";
 
             File docsFolder = new File(sd.getAbsolutePath() + "/skripsi/Laporan Pengaduan");
-            if (!docsFolder.exists()) {
-                docsFolder.mkdir();
-                Log.i("note", "Created a new directory for PDF");
+            if (!docsFolder.isDirectory()) {
+                docsFolder.mkdirs();
+                try {
+                    docsFolder.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             pdfFile = new File(docsFolder,file);
@@ -281,25 +290,16 @@ public class LaporanPengaduan extends AppCompatActivity {
             document.close();
             progressDialog.dismiss();
             Toast.makeText(this, "Laporan berhasil di exort", Toast.LENGTH_SHORT).show();
-            previewPdf();
+            previewPdf(sd.getAbsolutePath() + "/skripsi/Laporan Pengaduan/"+file);
         }
     }
 
-    private void previewPdf() {
+    private void previewPdf(String path) {
 
-        PackageManager packageManager = getPackageManager();
-        Intent testIntent = new Intent(Intent.ACTION_VIEW);
-        testIntent.setType("application/pdf");
-        List list = packageManager.queryIntentActivities(testIntent, PackageManager.MATCH_DEFAULT_ONLY);
-        if (list.size() > 0) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            Uri uri = Uri.fromFile(pdfFile);
-            intent.setDataAndType(uri, "application/pdf");
-
-            startActivity(intent);
-        }else{
-            Toast.makeText(this,"Download a PDF Viewer to see the generated PDF", Toast.LENGTH_SHORT).show();
-        }
+        File open = new File(path);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.fromFile(open));
+        Intent chooser = Intent.createChooser(intent,"Pilih");
+        startActivity(chooser);
     }
 }
