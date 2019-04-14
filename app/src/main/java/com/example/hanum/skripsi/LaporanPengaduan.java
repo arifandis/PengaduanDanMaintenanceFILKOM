@@ -289,7 +289,6 @@ public class LaporanPengaduan extends AppCompatActivity {
             document.add(table);
             document.close();
             progressDialog.dismiss();
-            Toast.makeText(this, "Laporan berhasil di exort", Toast.LENGTH_SHORT).show();
             previewPdf(sd.getAbsolutePath() + "/skripsi/Laporan Pengaduan/"+file);
         }
     }
