@@ -31,25 +31,30 @@ import java.util.Locale;
 public class NotificationMaintenance extends BroadcastReceiver {
 
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+    private boolean check;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String idMaintenance = intent.getStringExtra("idMaintenance");
         String kategori = intent.getStringExtra("kategori");
         String nomor = intent.getStringExtra("nomor");
-        String tanggalMulai = intent.getStringExtra("tanggalMulai");
-        int skala = intent.getIntExtra("skala",0);
-        int id = intent.getIntExtra("id",0);
+        String strTanggalMulai = intent.getStringExtra("tanggalMulai");
+        int skala = intent.getIntExtra("skala", 0);
+        int id = intent.getIntExtra("id", 0);
+
+//        Toast.makeText(context, "Alarm", Toast.LENGTH_SHORT).show();
 
         Intent intent1 = new Intent(context, CalendarAPI.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, -1, intent1, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setContentIntent(pendingIntent)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Notifikasi Maintenance")
-                        .setContentText("Besok maintenance "+kategori+" "+nomor);
+                        .setContentText("Besok maintenance " + kategori + " " + nomor)
+                        .setPriority(5)
+                        .setAutoCancel(true);
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(id, mBuilder.build());
@@ -61,29 +66,53 @@ public class NotificationMaintenance extends BroadcastReceiver {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        if (networkInfo !=null && networkInfo.isConnected()){
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ID"));
+            Calendar cal = Calendar.getInstance();
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH,1);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
+            try {
+                calendar.setTime(dateFormat.parse(strTanggalMulai));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DAY_OF_MONTH, skala);
             String tanggal = dateFormat.format(calendar.getTime());
-            Log.d("gantitanggalmulai",tanggal);
+            String tanggalMulai = dateFormat.format(cal.getTime());
+            Log.d("gantitanggalmulai", tanggal);
 
             mRef.child("maintenance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    long countRiwayat = dataSnapshot.child(idMaintenance).child("riwayat").getChildrenCount()+1;
+                    for (DataSnapshot data : dataSnapshot.child("riwayat").getChildren()) {
+                        String strTanggal = data.child("tanggalTerakhir").getValue(String.class);
+                        Log.d("tanggalTerakhir",strTanggal);
 
-                    mRef.child("maintenance").child(idMaintenance).child("tanggalMulai").setValue(tanggal);
-                    mRef.child("maintenance").child(idMaintenance).child("riwayat").child(countRiwayat+"")
-                            .child("id").setValue(countRiwayat);
-                    mRef.child("maintenance").child(idMaintenance).child("riwayat").child(countRiwayat+"")
-                            .child("tanggalTerakhir").setValue(tanggalMulai);
+                        if (tanggal.equals(strTanggal)) {
+                            check = true;
+                        }else{
+                            check = false;
+                        }
+                    }
+
+                    Log.d("checkstatus",check+"");
+
+                    if (check) {
+                        long countRiwayat = dataSnapshot.child(idMaintenance).child("riwayat").getChildrenCount() + 1;
+
+                        mRef.child("maintenance").child(idMaintenance).child("tanggalMulai").setValue(tanggalMulai);
+                        mRef.child("maintenance").child(idMaintenance).child("riwayat").child(countRiwayat + "")
+                                .child("id").setValue(countRiwayat);
+                        mRef.child("maintenance").child(idMaintenance).child("riwayat").child(countRiwayat + "")
+                                .child("tanggalTerakhir").setValue(tanggal);
+                    }
+
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d("databaseError",databaseError.getMessage());
+                    Log.d("databaseError", databaseError.getMessage());
                 }
             });
         }

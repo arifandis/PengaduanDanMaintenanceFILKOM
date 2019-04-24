@@ -116,10 +116,10 @@ public class FormPengaduanTanaman extends AppCompatActivity implements IPickResu
 
                 if (networkInfo !=null && networkInfo.isConnected()){
                     progressDialog.show();
-                    mRef.child("pengaduan").addListenerForSingleValueEvent(new ValueEventListener() {
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            long idPengaduan = dataSnapshot.getChildrenCount()+1;
+                            long idPengaduan = dataSnapshot.child("pengaduan").getChildrenCount()+1;
 
                             Calendar calendar = Calendar.getInstance();
                             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
@@ -132,9 +132,10 @@ public class FormPengaduanTanaman extends AppCompatActivity implements IPickResu
                                 String imageUrl = String.valueOf(taskSnapshot.getDownloadUrl());
 
                                 long idTaman = dataSnapshot.child("taman").getChildrenCount()+1;
+                                Log.d("idTaman",idTaman+"");
 
-                                Map<String,String> tanaman = new HashMap<>();
-                                tanaman.put("idTaman",String.valueOf(idTaman));
+                                Map<String,Object> tanaman = new HashMap<>();
+                                tanaman.put("idTaman",idTaman);
                                 tanaman.put("nama",nama);
                                 tanaman.put("lokasi",lokasi);
                                 tanaman.put("deskripsi",deskripsi);

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.hanum.skripsi.notif.NotifExample;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +56,7 @@ public class PilihRoleActivity extends AppCompatActivity {
         });
 
         btnPegawai.setOnClickListener(v->{
-            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             intent.putExtra("role","pegawai");
             startActivity(intent);
             finish();

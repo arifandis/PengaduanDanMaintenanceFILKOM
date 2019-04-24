@@ -99,10 +99,10 @@ public class FormPengaduanRuang extends AppCompatActivity implements IPickResult
 
                 if (networkInfo !=null && networkInfo.isConnected()){
                     progressDialog.show();
-                    mRef.child("pengaduan").addListenerForSingleValueEvent(new ValueEventListener() {
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            long idPengaduan = dataSnapshot.getChildrenCount()+1;
+                            long idPengaduan = dataSnapshot.child("pengaduan").getChildrenCount()+1;
 
                             Calendar calendar = Calendar.getInstance();
                             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));

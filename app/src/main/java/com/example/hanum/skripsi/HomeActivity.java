@@ -1,6 +1,7 @@
 package com.example.hanum.skripsi;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -206,6 +207,30 @@ public class HomeActivity extends AppCompatActivity {
             OneSignal.deleteTag("pengadu");
             OneSignal.deleteTag("kasubag");
             OneSignal.setSubscription(false);
+
+            mRef.child("maintenance").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot data: dataSnapshot.getChildren()){
+                        String maintenance = prefs.getString(data.getKey(),null);
+
+                        if (maintenance != null){
+                            int id = Integer.valueOf(String.valueOf(data.child("id").getValue()));
+
+                            Intent intent = new Intent(getApplicationContext(),NotificationMaintenance.class);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            manager.cancel(pendingIntent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println(databaseError.getMessage());
+                }
+            });
+
             editor.clear();
             editor.apply();
             startActivity(new Intent(this,PilihRoleActivity.class));
@@ -297,15 +322,19 @@ public class HomeActivity extends AppCompatActivity {
                         }
 
                         Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(System.currentTimeMillis());
-                        cal.clear();
                         cal.setTime(date);
-                        cal.add(Calendar.DAY_OF_MONTH,skala-1);
-                        cal.set(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE),9,0);
-                        Log.d("calendar",cal.get(Calendar.YEAR)+" "+cal.get(Calendar.MONTH)+" "+cal.get(Calendar.DATE));
+                        cal.add(Calendar.DAY_OF_MONTH,skala);
+//                        if (skala == 1){
+//                            cal.add(Calendar.DAY_OF_MONTH,skala);
+//                        }else{
+//                            cal.add(Calendar.DAY_OF_MONTH,skala);
+//                        }
+                        cal.set(Calendar.HOUR_OF_DAY,9);
+                        cal.set(Calendar.MINUTE,0);
+                        cal.set(Calendar.SECOND,0);
+                        Log.d("calendar",cal.getTime()+" "+cal.getTimeInMillis());
 
-                        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                        Intent intent = new Intent(getApplicationContext(), NotificationMaintenance.class);
+                        Intent intent = new Intent(getApplicationContext(),NotificationMaintenance.class);
                         intent.putExtra("idMaintenance",data.getKey());
                         intent.putExtra("kategori",kategori);
                         intent.putExtra("nomor",noInventaris);
@@ -313,10 +342,16 @@ public class HomeActivity extends AppCompatActivity {
                         intent.putExtra("tanggalMulai",tanggalMulai);
                         intent.putExtra("skala",skala);
                         intent.putExtra("id",id);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, intent, 0);
-//                        alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                                AlarmManager.INTERVAL_DAY*(skala-1), pendingIntent);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+                        if (skala == 1 || skala == 0){
+                            manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                                    AlarmManager.INTERVAL_DAY, pendingIntent);
+                        }else{
+                            manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                                    AlarmManager.INTERVAL_DAY*(skala-1), pendingIntent);
+                        }
 
                         Log.d("setalarm","done");
                     }

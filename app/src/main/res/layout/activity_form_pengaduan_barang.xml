@@ -7,29 +7,21 @@
     tools:context=".FormPengaduanBarang"
     android:background="@color/white">
 
-    <include
-        android:id="@+id/pengaduanKebersihan_toolbar"
-        layout="@layout/view_custom_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/pengaduanBarang_labelTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:text="@string/label_form_pengaduan_barang"
         android:textColor="@color/blue"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pengaduanKebersihan_toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/pengaduanBarang_selectImg"
@@ -51,18 +43,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
-        android:text="Nama"
+        android:text="Judul"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/pengaduanBarang_inputNamaEt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pengaduanBarang_inputNamaEt" />
 
     <EditText
         android:id="@+id/pengaduanBarang_inputNamaEt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="10dp"
@@ -70,6 +60,7 @@
         android:layout_marginRight="15dp"
         android:background="@drawable/bg_edit_text_line"
         android:padding="5dp"
+        android:gravity="top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pengaduanBarang_labelNamaTv"
         app:layout_constraintTop_toBottomOf="@+id/pengaduanBarang_selectImg" />
@@ -81,17 +72,17 @@
         android:text="No. Investaris"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/pengaduanBarang_inputNoInventarisEt"
         app:layout_constraintStart_toStartOf="@+id/pengaduanBarang_labelNamaTv"
         app:layout_constraintTop_toTopOf="@+id/pengaduanBarang_inputNoInventarisEt" />
 
     <EditText
         android:id="@+id/pengaduanBarang_inputNoInventarisEt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/bg_edit_text_line"
         android:padding="5dp"
+        android:gravity="top"
         app:layout_constraintEnd_toEndOf="@+id/pengaduanBarang_inputNamaEt"
         app:layout_constraintStart_toStartOf="@+id/pengaduanBarang_inputNamaEt"
         app:layout_constraintTop_toBottomOf="@+id/pengaduanBarang_inputNamaEt" />
@@ -103,17 +94,17 @@
         android:text="@string/label_lokas"
         android:textColor="@color/black"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/pengaduanBarang_inputLokasiEt"
         app:layout_constraintStart_toStartOf="@+id/pengaduanBarang_labelNamaTv"
         app:layout_constraintTop_toTopOf="@+id/pengaduanBarang_inputLokasiEt" />
 
     <EditText
         android:id="@+id/pengaduanBarang_inputLokasiEt"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/bg_edit_text_line"
         android:padding="5dp"
+        android:gravity="top"
         app:layout_constraintEnd_toEndOf="@+id/pengaduanBarang_inputNamaEt"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/pengaduanBarang_inputNamaEt"

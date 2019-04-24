@@ -7,26 +7,18 @@
     tools:context=".DaftarPengaduanTanaman"
     android:background="@color/white">
 
-    <include
-        android:id="@+id/daftarPengaduanTanaman_toolbar"
-        layout="@layout/view_custom_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/daftarPengaduanTanaman_filterBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/ic_filter_results_button"
-        android:text="Filter"
         android:paddingRight="20dp"
+        android:text="Filter"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/daftarPengaduanTanaman_toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/daftarPengaduanTanaman_labelTitleTv"
