@@ -92,28 +92,29 @@ public class TugasSaya extends AppCompatActivity {
                 for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").child(nipnim).child("idPengaduan")
                         .getChildren()){
                     String idPengaduan = data.getKey();
+                    for (DataSnapshot value: dataSnapshot.child("pengaduan").getChildren()){
+                        if (idPengaduan.equals(value.getKey())){
+                            Pengaduan pengaduan = new Pengaduan();
+                            pengaduan.setFoto(value.child("foto").getValue(String.class));
+                            pengaduan.setIdBarang(value.child("idBarang").getValue(String.class));
+                            pengaduan.setIdPengadu(value.child("idPengadu").getValue(String.class));
+                            pengaduan.setIdPengaduan(idPengaduan);
+                            pengaduan.setKerusakan(value.child("kerusakan").getValue(String.class));
+                            pengaduan.setLokasi(value.child("lokasi").getValue(String.class));
+                            pengaduan.setStatus(value.child("status").getValue(String.class));
+                            pengaduan.setTanggalMasuk(value.child("tanggalMasuk").getValue(String.class));
+                            pengaduan.setTanggalSelesai(value.child("tanggalSelesai").getValue(String.class));
+                            pengaduan.setIdPegawai(value.child("idPegawai").getValue(String.class));
+                            pengaduan.setId(value.child("id").getValue(Integer.class));
+
+                            pengaduanList.add(pengaduan);
+                            Collections.sort(pengaduanList, (p1, p2) -> {
+                                return p1.getId() - p2.getId(); // Ascending
+                            });
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
                     Log.d("tugassayapengaduan",idPengaduan);
-
-                    DataSnapshot value = dataSnapshot.child("pengaduan").child(idPengaduan);
-
-                    Pengaduan pengaduan = new Pengaduan();
-                    pengaduan.setFoto(value.child("foto").getValue(String.class));
-                    pengaduan.setIdBarang(value.child("idBarang").getValue(String.class));
-                    pengaduan.setIdPengadu(value.child("idPengadu").getValue(String.class));
-                    pengaduan.setIdPengaduan(idPengaduan);
-                    pengaduan.setKerusakan(value.child("kerusakan").getValue(String.class));
-                    pengaduan.setLokasi(value.child("lokasi").getValue(String.class));
-                    pengaduan.setStatus(value.child("status").getValue(String.class));
-                    pengaduan.setTanggalMasuk(value.child("tanggalMasuk").getValue(String.class));
-                    pengaduan.setTanggalSelesai(value.child("tanggalSelesai").getValue(String.class));
-                    pengaduan.setIdPegawai(value.child("idPegawai").getValue(String.class));
-                    pengaduan.setId(value.child("id").getValue(Integer.class));
-
-                    pengaduanList.add(pengaduan);
-                    Collections.sort(pengaduanList, (p1, p2) -> {
-                        return p1.getId() - p2.getId(); // Ascending
-                    });
-                    adapter.notifyDataSetChanged();
                 }
 
                 progressBar.setVisibility(View.GONE);

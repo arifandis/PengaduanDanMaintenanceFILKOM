@@ -36,10 +36,10 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class HomeActivity extends AppCompatActivity {
-    private CardView cardTanaman,cardKebersihan,cardBarang,cardRuangan;
-    private ImageView imgTugasSaya,imgBuatJadwal,imgLaporanPengaduan,imgLaporanMaintenance,imgLaporanRating;
-    private TextView tvTugasSaya,tvBuatJadwal,tvName,tvLaporanPengaduan,tvLaporanMaintenance,tvLaporanRating;
-    private Button btnDaftarPengaduan,btnLogout,btnStatistikPengaduan,btnJadwalMaintenance;
+    private CardView cardTanaman, cardKebersihan, cardBarang, cardRuangan;
+    private ImageView imgTugasSaya, imgBuatJadwal, imgLaporanPengaduan, imgLaporanMaintenance, imgLaporanRating;
+    private TextView tvTugasSaya, tvBuatJadwal, tvName, tvLaporanPengaduan, tvLaporanMaintenance, tvLaporanRating;
+    private Button btnDaftarPengaduan, btnLogout, btnStatistikPengaduan, btnJadwalMaintenance;
     private RatingBar ratingBar;
 
     DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
@@ -80,12 +80,12 @@ public class HomeActivity extends AppCompatActivity {
                 .init();
         OneSignal.setSubscription(true);
 
-        prefs = getSharedPreferences(PREF_NAME,MODE_PRIVATE);
-        editor = getSharedPreferences(PREF_NAME,MODE_PRIVATE).edit();
-        String role = prefs.getString("role",null);
-        String nipnim = prefs.getString("id",null);
+        prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
+        String role = prefs.getString("role", null);
+        String nipnim = prefs.getString("id", null);
 
-        if (role.equals("pegawai")){
+        if (role.equals("pegawai")) {
             OneSignal.sendTag("pegawai", nipnim);
             imgBuatJadwal.setVisibility(View.VISIBLE);
             imgTugasSaya.setVisibility(View.VISIBLE);
@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
             tvLaporanPengaduan.setVisibility(View.GONE);
             tvLaporanMaintenance.setVisibility(View.GONE);
             tvLaporanRating.setVisibility(View.GONE);
-        }else if (role.equals("pengadu")){
+        } else if (role.equals("pengadu")) {
             OneSignal.sendTag("pengadu", nipnim);
             imgBuatJadwal.setVisibility(View.GONE);
             imgTugasSaya.setVisibility(View.GONE);
@@ -111,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
             tvLaporanPengaduan.setVisibility(View.GONE);
             tvLaporanMaintenance.setVisibility(View.GONE);
             tvLaporanRating.setVisibility(View.GONE);
-        }else if(role.equals("kasubag")){
+        } else if (role.equals("kasubag")) {
             OneSignal.sendTag("kasubag", nipnim);
             imgBuatJadwal.setVisibility(View.GONE);
             imgTugasSaya.setVisibility(View.GONE);
@@ -132,36 +132,36 @@ public class HomeActivity extends AppCompatActivity {
                 String nama = "";
 //                float rating = 0;
 
-                if (role != null){
-                    if (role.equals("pengadu")){
-                        for (DataSnapshot data: dataSnapshot.getChildren()){
+                if (role != null) {
+                    if (role.equals("pengadu")) {
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
                             String key = data.getKey();
-                            if (key.equals("dosen")){
-                                for (DataSnapshot value: data.getChildren()){
+                            if (key.equals("dosen")) {
+                                for (DataSnapshot value : data.getChildren()) {
                                     String id = value.getKey();
-                                    if (nipnim.equals(id)){
+                                    if (nipnim.equals(id)) {
                                         nama = value.child("nama").getValue(String.class);
                                     }
                                 }
-                            }else if(key.equals("mahasiswa")){
-                                for (DataSnapshot value: data.getChildren()){
+                            } else if (key.equals("mahasiswa")) {
+                                for (DataSnapshot value : data.getChildren()) {
                                     String id = value.getKey();
-                                    if (nipnim.equals(id)){
+                                    if (nipnim.equals(id)) {
                                         nama = value.child("nama").getValue(String.class);
                                     }
                                 }
                             }
                         }
-                    }else if (role.equals("pegawai")){
-                        for (DataSnapshot data: dataSnapshot.child("pegawaiPerkap").getChildren()){
+                    } else if (role.equals("pegawai")) {
+                        for (DataSnapshot data : dataSnapshot.child("pegawaiPerkap").getChildren()) {
                             String id = data.getKey();
-                            if (nipnim.equals(id)){
+                            if (nipnim.equals(id)) {
                                 nama = data.child("nama").getValue(String.class);
 //                                rating = data.child("rating").getValue(Float.class);
                                 setNotifMaintenance();
                             }
                         }
-                    }else{
+                    } else {
                         nama = "Kasubag";
                     }
                 }
@@ -176,33 +176,33 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        imgTugasSaya.setOnClickListener(v -> startActivity(new Intent(this,TugasSaya.class)));
-        imgBuatJadwal.setOnClickListener(v-> startActivity(new Intent(this, FormJadwalMaintenance.class)));
-        tvTugasSaya.setOnClickListener(v -> startActivity(new Intent(this,TugasSaya.class)));
-        tvBuatJadwal.setOnClickListener(v -> startActivity(new Intent(this,CalendarAPI.class)));
+        imgTugasSaya.setOnClickListener(v -> startActivity(new Intent(this, TugasSaya.class)));
+        imgBuatJadwal.setOnClickListener(v -> startActivity(new Intent(this, FormJadwalMaintenance.class)));
+        tvTugasSaya.setOnClickListener(v -> startActivity(new Intent(this, TugasSaya.class)));
+        tvBuatJadwal.setOnClickListener(v -> startActivity(new Intent(this, CalendarAPI.class)));
 
-        imgLaporanPengaduan.setOnClickListener(v -> startActivity(new Intent(this,LaporanPengaduan.class)));
-        imgLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this,LaporanMaintenance.class)));
-        imgLaporanRating.setOnClickListener(v -> startActivity(new Intent(this,LaporanRating.class)));
-        tvLaporanPengaduan.setOnClickListener(v -> startActivity(new Intent(this,LaporanPengaduan.class)));
-        tvLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this,LaporanMaintenance.class)));
-        tvLaporanRating.setOnClickListener(v -> startActivity(new Intent(this,LaporanRating.class)));
+        imgLaporanPengaduan.setOnClickListener(v -> startActivity(new Intent(this, LaporanPengaduan.class)));
+        imgLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this, LaporanMaintenance.class)));
+        imgLaporanRating.setOnClickListener(v -> startActivity(new Intent(this, LaporanRating.class)));
+        tvLaporanPengaduan.setOnClickListener(v -> startActivity(new Intent(this, LaporanPengaduan.class)));
+        tvLaporanMaintenance.setOnClickListener(v -> startActivity(new Intent(this, LaporanMaintenance.class)));
+        tvLaporanRating.setOnClickListener(v -> startActivity(new Intent(this, LaporanRating.class)));
 
-        if (role.equals("pegawai") || role.equals("kasubag")){
-            cardTanaman.setOnClickListener(v -> startActivity(new Intent(this,DaftarPengaduanTanaman.class)));
-            cardKebersihan.setOnClickListener(v -> startActivity(new Intent(this,DaftarPengaduanKebersihan.class)));
-            cardBarang.setOnClickListener(v -> startActivity(new Intent(this,DaftarPengaduanBarang.class)));
-            cardRuangan.setOnClickListener(v -> startActivity(new Intent(this,DaftarPengaduanRuang.class)));
-        }else{
-            cardTanaman.setOnClickListener(v -> startActivity(new Intent(this,FormPengaduanTanaman.class)));
-            cardKebersihan.setOnClickListener(v -> startActivity(new Intent(this,FormPengaduanKebersihan.class)));
-            cardBarang.setOnClickListener(v -> startActivity(new Intent(this,FormPengaduanBarang.class)));
-            cardRuangan.setOnClickListener(v -> startActivity(new Intent(this,FormPengaduanRuang.class)));
+        if (role.equals("pegawai") || role.equals("kasubag")) {
+            cardTanaman.setOnClickListener(v -> startActivity(new Intent(this, DaftarPengaduanTanaman.class)));
+            cardKebersihan.setOnClickListener(v -> startActivity(new Intent(this, DaftarPengaduanKebersihan.class)));
+            cardBarang.setOnClickListener(v -> startActivity(new Intent(this, DaftarPengaduanBarang.class)));
+            cardRuangan.setOnClickListener(v -> startActivity(new Intent(this, DaftarPengaduanRuang.class)));
+        } else {
+            cardTanaman.setOnClickListener(v -> startActivity(new Intent(this, FormPengaduanTanaman.class)));
+            cardKebersihan.setOnClickListener(v -> startActivity(new Intent(this, FormPengaduanKebersihan.class)));
+            cardBarang.setOnClickListener(v -> startActivity(new Intent(this, FormPengaduanBarang.class)));
+            cardRuangan.setOnClickListener(v -> startActivity(new Intent(this, FormPengaduanRuang.class)));
         }
         btnDaftarPengaduan.setOnClickListener(v -> startActivity(new Intent(this, DaftarPengaduan.class)));
         btnJadwalMaintenance.setOnClickListener(v -> startActivity(new Intent(this, CalendarAPI.class)));
         btnStatistikPengaduan.setOnClickListener(v -> startActivity(new Intent(this, StatistikPengaduan.class)));
-        btnLogout.setOnClickListener(v->{
+        btnLogout.setOnClickListener(v -> {
             OneSignal.deleteTag("pegawai");
             OneSignal.deleteTag("pengadu");
             OneSignal.deleteTag("kasubag");
@@ -211,14 +211,14 @@ public class HomeActivity extends AppCompatActivity {
             mRef.child("maintenance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot data: dataSnapshot.getChildren()){
-                        String maintenance = prefs.getString(data.getKey(),null);
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        String maintenance = prefs.getString(data.getKey(), null);
 
-                        if (maintenance != null){
+                        if (maintenance != null) {
                             int id = Integer.valueOf(String.valueOf(data.child("id").getValue()));
 
-                            Intent intent = new Intent(getApplicationContext(),NotificationMaintenance.class);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+                            Intent intent = new Intent(getApplicationContext(), NotificationMaintenance.class);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                             AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
                             manager.cancel(pendingIntent);
                         }
@@ -233,29 +233,29 @@ public class HomeActivity extends AppCompatActivity {
 
             editor.clear();
             editor.apply();
-            startActivity(new Intent(this,PilihRoleActivity.class));
+            startActivity(new Intent(this, PilihRoleActivity.class));
             finish();
         });
     }
 
-    private void showRating(String nipnim){
+    private void showRating(String nipnim) {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data: dataSnapshot.child("pengaduan").getChildren()){
+                for (DataSnapshot data : dataSnapshot.child("pengaduan").getChildren()) {
                     String idPengadu = data.child("idPengadu").getValue(String.class);
-                    if (nipnim.equals(idPengadu)){
+                    if (nipnim.equals(idPengadu)) {
                         String idPegawai = data.child("idPegawai").getValue(String.class);
                         String idPengaduan = data.getKey();
 
-                        if (!idPegawai.equals("-")){
+                        if (!idPegawai.equals("-")) {
                             String pengaduan = String.valueOf(dataSnapshot.child("pegawaiPerkap").child(idPegawai)
                                     .child("idPengaduan").child(idPengaduan).child("status").getValue());
 
-                            if (pengaduan.equals("selesai")){
-                                Intent intent = new Intent(getApplicationContext(),RatingPegawai.class);
-                                intent.putExtra("idPegawai",idPegawai);
-                                intent.putExtra("idPengaduan",idPengaduan);
+                            if (pengaduan.equals("selesai")) {
+                                Intent intent = new Intent(getApplicationContext(), RatingPegawai.class);
+                                intent.putExtra("idPegawai", idPegawai);
+                                intent.putExtra("idPengaduan", idPengaduan);
                                 startActivity(intent);
                             }
                         }
@@ -273,13 +273,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        prefs = getSharedPreferences(PREF_NAME,MODE_PRIVATE);
-        String role = prefs.getString("role",null);
-        String nipnim = prefs.getString("id",null);
+        prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String role = prefs.getString("role", null);
+        String nipnim = prefs.getString("id", null);
 
-        if (role.equals("pengadu")){
+        if (role.equals("pengadu")) {
             showRating(nipnim);
-        }else if (role.equals("pegawai")){
+        } else if (role.equals("pegawai")) {
             mRef.child("pegawaiPerkap").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -289,78 +289,78 @@ public class HomeActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.d("databaseerror",databaseError.getMessage());
+                    Log.d("databaseerror", databaseError.getMessage());
                     ratingBar.setRating(0f);
                 }
             });
         }
     }
 
-    protected void setNotifMaintenance(){
+    protected void setNotifMaintenance() {
         mRef.child("maintenance").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data: dataSnapshot.getChildren()){
-                    String maintenancePref = prefs.getString(data.getKey(),null);
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    String maintenancePref = prefs.getString(data.getKey(), null);
 
-                    if (maintenancePref == null){
-                        editor.putString(data.getKey(),String.valueOf(data.child("nomor").getValue()));
-                        String kategori = String.valueOf(data.child("kategori").getValue());
-                        String noInventaris = String.valueOf(data.child("nomor").getValue());
-                        int skala = Integer.valueOf(String.valueOf(data.child("skala").getValue()));
-                        int id = Integer.valueOf(String.valueOf(data.child("id").getValue()));
-                        String tanggalMulai = String.valueOf(data.child("tanggalMulai").getValue());
+//                    if (maintenancePref == null){
+                    editor.putString(data.getKey(), String.valueOf(data.child("nomor").getValue()));
+                    String kategori = String.valueOf(data.child("kategori").getValue());
+                    String noInventaris = String.valueOf(data.child("nomor").getValue());
+                    int skala = Integer.valueOf(String.valueOf(data.child("skala").getValue()));
+                    int id = Integer.valueOf(String.valueOf(data.child("id").getValue()));
+                    String tanggalMulai = String.valueOf(data.child("tanggalMulai").getValue());
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
-                        Date date = new Date();
-                        try {
-                            date = dateFormat.parse(tanggalMulai);
-                            Log.d("Date",String.valueOf(date));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                            Log.d("dateerror",e.getMessage());
-                        }
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ID"));
+                    Date date = new Date();
+                    try {
+                        date = dateFormat.parse(tanggalMulai);
+                        Log.d("Date", String.valueOf(date));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Log.d("dateerror", e.getMessage());
+                    }
 
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(date);
-                        cal.add(Calendar.DAY_OF_MONTH,skala);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    cal.add(Calendar.DAY_OF_MONTH, skala);
 //                        if (skala == 1){
 //                            cal.add(Calendar.DAY_OF_MONTH,skala);
 //                        }else{
 //                            cal.add(Calendar.DAY_OF_MONTH,skala);
 //                        }
-                        cal.set(Calendar.HOUR_OF_DAY,9);
-                        cal.set(Calendar.MINUTE,0);
-                        cal.set(Calendar.SECOND,0);
-                        Log.d("calendar",cal.getTime()+" "+cal.getTimeInMillis());
+                    cal.set(Calendar.HOUR_OF_DAY, 9);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    Log.d("calendar", cal.getTime() + " " + cal.getTimeInMillis());
 
-                        Intent intent = new Intent(getApplicationContext(),NotificationMaintenance.class);
-                        intent.putExtra("idMaintenance",data.getKey());
-                        intent.putExtra("kategori",kategori);
-                        intent.putExtra("nomor",noInventaris);
-                        intent.putExtra("kategori",kategori);
-                        intent.putExtra("tanggalMulai",tanggalMulai);
-                        intent.putExtra("skala",skala);
-                        intent.putExtra("id",id);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),id,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    Intent intent = new Intent(getApplicationContext(), NotificationMaintenance.class);
+                    intent.putExtra("idMaintenance", data.getKey());
+                    intent.putExtra("kategori", kategori);
+                    intent.putExtra("nomor", noInventaris);
+                    intent.putExtra("kategori", kategori);
+                    intent.putExtra("tanggalMulai", tanggalMulai);
+                    intent.putExtra("skala", skala);
+                    intent.putExtra("id", id);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-                        if (skala == 1 || skala == 0){
-                            manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                                    AlarmManager.INTERVAL_DAY, pendingIntent);
-                        }else{
-                            manager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                                    AlarmManager.INTERVAL_DAY*(skala-1), pendingIntent);
-                        }
-
-                        Log.d("setalarm","done");
+                    if (skala == 1 || skala == 0) {
+                        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                                AlarmManager.INTERVAL_DAY, pendingIntent);
+                    } else {
+                        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                                AlarmManager.INTERVAL_DAY * (skala - 1), pendingIntent);
                     }
+
+                    Log.d("setalarm", "done");
                 }
+//                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("databaseerror",databaseError.getMessage());
+                Log.d("databaseerror", databaseError.getMessage());
             }
         });
     }

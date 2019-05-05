@@ -1,5 +1,7 @@
 package com.example.hanum.skripsi.notif;
 
+import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -28,10 +30,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class NotificationMaintenance extends BroadcastReceiver {
 
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-    private boolean check;
+    private Calendar cal, calendar;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -53,7 +57,8 @@ public class NotificationMaintenance extends BroadcastReceiver {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Notifikasi Maintenance")
                         .setContentText("Besok maintenance " + kategori + " " + nomor)
-                        .setPriority(5)
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setDefaults(Notification.DEFAULT_ALL)
                         .setAutoCancel(true);
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -66,38 +71,55 @@ public class NotificationMaintenance extends BroadcastReceiver {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ID"));
+        cal = Calendar.getInstance();
+        calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(dateFormat.parse(strTanggalMulai));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.add(Calendar.DAY_OF_MONTH, skala);
+        String tanggal = dateFormat.format(calendar.getTime());
+        String tanggalMulai = dateFormat.format(cal.getTime());
+        Log.d("gantitanggalmulai", tanggal);
+
+        Intent alarmIntent = new Intent(context, NotificationMaintenance.class);
+        intent.putExtra("idMaintenance", idMaintenance);
+        intent.putExtra("kategori", kategori);
+        intent.putExtra("nomor", nomor);
+        intent.putExtra("kategori", kategori);
+        intent.putExtra("tanggalMulai", tanggalMulai);
+        intent.putExtra("skala", skala);
+        intent.putExtra("id", id);
+        PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager manager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+
+        if (skala == 1 || skala == 0) {
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntentAlarm);
+        } else {
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY * (skala - 1), pendingIntentAlarm);
+        }
+
         if (networkInfo != null && networkInfo.isConnected()) {
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ID"));
-            Calendar cal = Calendar.getInstance();
-            Calendar calendar = Calendar.getInstance();
-            try {
-                calendar.setTime(dateFormat.parse(strTanggalMulai));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            calendar.add(Calendar.DAY_OF_MONTH, skala);
-            String tanggal = dateFormat.format(calendar.getTime());
-            String tanggalMulai = dateFormat.format(cal.getTime());
-            Log.d("gantitanggalmulai", tanggal);
-
             mRef.child("maintenance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    boolean check = false;
                     for (DataSnapshot data : dataSnapshot.child("riwayat").getChildren()) {
                         String strTanggal = data.child("tanggalTerakhir").getValue(String.class);
-                        Log.d("tanggalTerakhir",strTanggal);
+                        Log.d("tanggalTerakhir", strTanggal + " " + tanggal);
 
                         if (tanggal.equals(strTanggal)) {
                             check = true;
-                        }else{
-                            check = false;
                         }
                     }
 
-                    Log.d("checkstatus",check+"");
+                    Log.d("checkstatus", check + "");
 
-                    if (check) {
+                    if (!check) {
                         long countRiwayat = dataSnapshot.child(idMaintenance).child("riwayat").getChildrenCount() + 1;
 
                         mRef.child("maintenance").child(idMaintenance).child("tanggalMulai").setValue(tanggalMulai);
@@ -106,7 +128,6 @@ public class NotificationMaintenance extends BroadcastReceiver {
                         mRef.child("maintenance").child(idMaintenance).child("riwayat").child(countRiwayat + "")
                                 .child("tanggalTerakhir").setValue(tanggal);
                     }
-
                 }
 
                 @Override
