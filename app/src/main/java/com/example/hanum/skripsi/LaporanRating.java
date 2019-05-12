@@ -148,7 +148,6 @@ public class LaporanRating extends AppCompatActivity {
                     int count = 0;
                     nomor++;
                     String nama = dataPegawai.child("nama").getValue(String.class);
-                    Log.d("namapegawai",nama);
 
                     for (DataSnapshot dataPengaduan: dataPegawai.child("idPengaduan").getChildren()){
                         String tanggalDiterima = dataPengaduan.child("tanggalDiterima").getValue(String.class);

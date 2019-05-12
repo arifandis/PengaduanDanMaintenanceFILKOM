@@ -109,7 +109,7 @@ public class RatingPegawai extends AppCompatActivity {
                             float ratinxFix = rating/count;
                             mRef.child("pegawaiPerkap").child(mIdPegawai).child("rating").setValue(ratinxFix)
                                     .addOnSuccessListener(aVoid -> {
-                                        sendNotifitcation();
+                                        sendNotifitcation(mIdPegawai);
                                         Toast.makeText(getApplicationContext(), "Rating berhasil diberikan", Toast.LENGTH_SHORT).show();
                                         finish();
                                     });
@@ -124,7 +124,7 @@ public class RatingPegawai extends AppCompatActivity {
 
     }
 
-    private void sendNotifitcation(){
+    private void sendNotifitcation(String id){
         try {
             String jsonResponse;
 
@@ -140,12 +140,11 @@ public class RatingPegawai extends AppCompatActivity {
 
             String strJsonBody = ("{"
                     + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
-                    + "\"filters\": [{\"field\": \"tag\", \"key\": \"pengadu\", \"relation\": \"=\", \"value\": \""+mIdPegawai+"\"}],"
+                    + "\"filters\": [{\"field\": \"tag\", \"key\": \"pegawai\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
                     + "\"data\": {\"foo\": \"bar\"},"
                     + "\"contents\": {\"en\": \"Selamat Anda mendapatkan rating\"},"
                     + "\"headings\": {\"en\": \"Anda telah melaksanakan tugas dengan baik\"}"
                     + "}");
-
 
             System.out.println("strJsonBody:\n" + strJsonBody);
 
@@ -172,7 +171,8 @@ public class RatingPegawai extends AppCompatActivity {
             System.out.println("jsonResponse:\n" + jsonResponse);
 
         } catch(Throwable t) {
-//            t.printStackTrace();
+            t.printStackTrace();
+            System.out.println("Failure send notif:"+ t.getMessage());
             Toast.makeText(this, "Gagal mengirimkan notifikasi", Toast.LENGTH_SHORT).show();
         }
     }

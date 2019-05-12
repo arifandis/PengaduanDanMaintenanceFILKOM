@@ -37,7 +37,7 @@ public class DetailPengaduan extends AppCompatActivity {
     private ImageView imgFoto;
     private Button btnTerima,btnVendor,btnPerbaiki,btnSelesai;
 
-    private String PREF_NAME = "SkripsiPrefs";
+    private String PREF_NAME = "SkripsiPrefs", mStatus;
     SharedPreferences preferences;
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
     private String idPengaduan;
@@ -152,7 +152,8 @@ public class DetailPengaduan extends AppCompatActivity {
                     });
                 }
 
-                ubahStatus(idPengadu,idPegawai,status);
+                String idPegawaiCurrent = preferences.getString("id",null);
+                ubahStatus(idPengadu,idPegawaiCurrent,status);
             }
 
             @Override
@@ -168,7 +169,8 @@ public class DetailPengaduan extends AppCompatActivity {
             if (status.equals("belum diterima")){
                 btnTerima.setVisibility(View.VISIBLE);
                 btnTerima.setOnClickListener(v->{
-                    sendNotifitcation(idPengadu,status,idPegawai);
+                    btnTerima.setVisibility(View.GONE);
+                    sendNotifitcation(idPengadu,status,idPegawai,"belum diterima");
 
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
@@ -185,8 +187,9 @@ public class DetailPengaduan extends AppCompatActivity {
 
                     btnPerbaiki.setVisibility(View.VISIBLE);
                     btnVendor.setVisibility(View.VISIBLE);
-                    btnTerima.setVisibility(View.GONE);
                     tvStatus.setText("diterima");
+                    mStatus = "diterima";
+                    ubahStatus(idPengadu,idPegawai,mStatus);
                     tvStatus.setBackgroundResource(R.drawable.bg_diterima);
                 });
             }else if (status.equals("diterima")){
@@ -195,26 +198,34 @@ public class DetailPengaduan extends AppCompatActivity {
                     btnVendor.setVisibility(View.VISIBLE);
                 }
                 btnPerbaiki.setOnClickListener(v->{
+                    btnPerbaiki.setVisibility(View.GONE);
+                    btnVendor.setVisibility(View.GONE);
+                    sendNotifitcation(idPengadu,status,idPegawai,"sedang diproses");
+
                     mRef.child("pengaduan").child(idPengaduan).child("status").setValue("sedang diproses");
                     mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
                             .child("status").setValue("sedang diproses");
 
-                    btnPerbaiki.setVisibility(View.GONE);
-                    btnVendor.setVisibility(View.GONE);
                     btnSelesai.setVisibility(View.VISIBLE);
                     tvStatus.setText("sedang diproses");
+                    mStatus = "sedang diproses";
+                    ubahStatus(idPengadu,idPegawai,mStatus);
                     tvStatus.setBackgroundResource(R.drawable.bg_diproses);
                 });
 
                 btnVendor.setOnClickListener(v->{
+                    btnPerbaiki.setVisibility(View.GONE);
+                    btnVendor.setVisibility(View.GONE);
+                    sendNotifitcation(idPengadu,status,idPegawai,"sedang divendor");
+
                     mRef.child("pengaduan").child(idPengaduan).child("status").setValue("sedang divendor");
                     mRef.child("pegawaiPerkap").child(idPegawaiCurrent).child("idPengaduan").child(idPengaduan)
                             .child("status").setValue("sedang divendor");
 
-                    btnPerbaiki.setVisibility(View.GONE);
-                    btnVendor.setVisibility(View.GONE);
                     btnSelesai.setVisibility(View.VISIBLE);
                     tvStatus.setText("sedang divendor");
+                    mStatus = "sedang divendor";
+                    ubahStatus(idPengadu,idPegawai,mStatus);
                     tvStatus.setBackgroundResource(R.drawable.bg_divendor);
                 });
             }else if (status.equals("sedang diproses") || status.equals("sedang divendor")){
@@ -223,7 +234,7 @@ public class DetailPengaduan extends AppCompatActivity {
                 }
 
                 btnSelesai.setOnClickListener(v->{
-                    sendNotifitcation(idPengadu,status,idPegawai);
+                    sendNotifitcation(idPengadu,status,idPegawai,"selesai");
 
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("ID"));
@@ -236,13 +247,14 @@ public class DetailPengaduan extends AppCompatActivity {
 
                     btnSelesai.setVisibility(View.GONE);
                     tvStatus.setText("selesai");
+                    mStatus = "selesai";
                     tvStatus.setBackgroundResource(R.drawable.bg_selesai);
                 });
             }
         }
     }
 
-    private void sendNotifitcation(String id, String status,String idPegawai){
+    private void sendNotifitcation(String id, String status,String idPegawai, String currentStatus){
         try {
             String jsonResponse;
 
@@ -265,6 +277,24 @@ public class DetailPengaduan extends AppCompatActivity {
                         + "\"contents\": {\"en\": \""+idPegawai+" telah menerima pengaduan Anda\"},"
                         + "\"headings\": {\"en\": \""+idPengaduan+" telah diterima\"}"
                         + "}");
+            }else if (status.equals("diterima")){
+                if (currentStatus.equals("sedang diproses")){
+                    strJsonBody = ("{"
+                            + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
+                            + "\"filters\": [{\"field\": \"tag\", \"key\": \"pengadu\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
+                            + "\"data\": {\"foo\": \"bar\"},"
+                            + "\"contents\": {\"en\": \""+idPegawai+" sedang memproses pengaduan Anda\"},"
+                            + "\"headings\": {\"en\": \""+idPengaduan+" sedang diproses\"}"
+                            + "}");
+                }else if (currentStatus.equals("sedang divendor")){
+                    strJsonBody = ("{"
+                            + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
+                            + "\"filters\": [{\"field\": \"tag\", \"key\": \"pengadu\", \"relation\": \"=\", \"value\": \""+id+"\"}],"
+                            + "\"data\": {\"foo\": \"bar\"},"
+                            + "\"contents\": {\"en\": \""+idPegawai+" sedang menyerahkan ke vendor pengaduan Anda\"},"
+                            + "\"headings\": {\"en\": \""+idPengaduan+" sedang divendor\"}"
+                            + "}");
+                }
             }else{
                 strJsonBody = ("{"
                         + "\"app_id\": \"10d60748-fe76-4739-b4d3-8e4b91743c3a\","
